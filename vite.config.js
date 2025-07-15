@@ -8,7 +8,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [
     vue(),
-    // vueDevTools(), // 临时禁用以解决 crypto.hash 错误
+    vueDevTools(), // 临时禁用以解决 crypto.hash 错误
   ],
   resolve: {
     alias: {
