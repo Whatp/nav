@@ -1,0 +1,7 @@
+# wrangler.toml
+name = "mao_nav"
+compatibility_date = "2024-01-01"
+
+[build]
+command = "npm run build"
+cwd = "."

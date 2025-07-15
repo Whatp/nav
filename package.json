@@ -1,0 +1,51 @@
+{
+  "name": "nav",
+  "version": "1.0.0",
+  "description": "🐱 一个简洁美观的个人导航网站，支持分类管理和自定义收藏夹",
+  "private": false,
+  "type": "module",
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/your-username/nav#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/nav.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/nav/issues"
+  },
+  "keywords": [
+    "navigation",
+    "bookmarks",
+    "vue3",
+    "vite",
+    "cloudflare-pages",
+    "personal-website",
+    "导航网站",
+    "书签管理"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix"
+  },
+  "dependencies": {
+    "pinia": "^3.0.3",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "eslint": "^9.29.0",
+    "eslint-plugin-vue": "~10.2.0",
+    "globals": "^16.2.0",
+    "vite": "^5.4.10",
+    "vite-plugin-vue-devtools": "^7.7.7"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
