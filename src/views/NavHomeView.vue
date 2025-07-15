@@ -1,30 +1,26 @@
 <template>
-  <div class="nav-home">
-    <!-- 左侧边栏 -->
-    <aside class="sidebar">
-      <!-- Logo区域 -->
+  <div class="nav-home" :class="{ dark: isDark }">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" :class="{ collapsed: sidebarCollapsed, dark: isDark }">
       <div class="logo-section">
         <img src="@/assets/logo.png" alt="logo" class="logo" />
-        <h1 class="site-title">{{ title || '梅零落的导航' }}</h1>
+        <h1 class="site-title" v-show="!sidebarCollapsed">{{ title || '梅零落的导航' }}</h1>
       </div>
-
-      <!-- 分类导航 -->
       <nav class="category-nav">
-        <h2 class="nav-title">分类导航</h2>
-                <ul class="category-list">
+        <h2 class="nav-title" v-show="!sidebarCollapsed">分类导航</h2>
+        <ul class="category-list">
           <li
             v-for="category in categories"
             :key="category.id"
             class="category-item"
-            @click="scrollToCategory(category.id)"
+            :class="{ active: activeCategoryId === category.id }"
+            @click="selectCategory(category.id); scrollToCategory(category.id)"
           >
             <span class="category-icon">{{ category.icon }}</span>
-            <span class="category-name">{{ category.name }}</span>
+            <span class="category-name" v-show="!sidebarCollapsed">{{ category.name }}</span>
           </li>
         </ul>
       </nav>
-
-      <!-- 左侧边栏底部信息 -->
       <div class="sidebar-footer">
         <a
           href="https://github.com/Whatp/nav"
@@ -40,11 +36,14 @@
         </a>
       </div>
     </aside>
-
-    <!-- 右侧主内容区 -->
+    <!-- 主内容区 -->
     <main class="main-content">
-                  <!-- 顶部搜索栏 -->
+      <!-- 顶部搜索栏 -->
       <header class="search-header">
+        <button class="collapse-btn" @click="toggleSidebar" :title="sidebarCollapsed ? '展开侧边栏' : '收起侧边栏'">
+          <svg v-if="!sidebarCollapsed" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="2" rx="1" fill="#2c3e50"/><rect x="4" y="11" width="16" height="2" rx="1" fill="#2c3e50"/><rect x="4" y="16" width="16" height="2" rx="1" fill="#2c3e50"/><polygon points="19,12 15,9 15,15" fill="#2c3e50"/></svg>
+          <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="2" rx="1" fill="#2c3e50"/><rect x="4" y="11" width="16" height="2" rx="1" fill="#2c3e50"/><rect x="4" y="16" width="16" height="2" rx="1" fill="#2c3e50"/><polygon points="5,12 9,9 9,15" fill="#2c3e50"/></svg>
+        </button>
         <div class="search-container">
           <div class="search-engine-selector">
             <img :src="searchEngines[selectedEngine].icon" :alt="selectedEngine" class="engine-logo" />
@@ -63,6 +62,10 @@
             @keyup.enter="handleSearch"
           />
         </div>
+        <button class="theme-toggle-btn" @click="toggleTheme" :title="isDark ? '切换为浅色' : '切换为深色'">
+          <svg v-if="!isDark" width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" fill="#2c3e50"/><g stroke="#2c3e50" stroke-width="2"><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></g></svg>
+          <svg v-else width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79z" fill="#f1c40f"/></svg>
+        </button>
 
         <!-- 移动端菜单按钮 -->
         <button class="mobile-menu-btn" @click="toggleMobileMenu">
@@ -101,15 +104,13 @@
           <div class="loading-spinner"></div>
           <p>加载中...</p>
         </div>
-
         <!-- 错误状态 -->
         <div v-else-if="error" class="error">
           <p>{{ error }}</p>
           <button @click="fetchCategories" class="retry-btn">重试</button>
         </div>
-
-                <!-- 分类内容 -->
-        <div v-else class="categories-container">
+        <!-- 分类内容 -->
+        <div v-else class="categories-container card-style">
           <section
             v-for="category in categories"
             :key="category.id"
@@ -120,7 +121,6 @@
               <span class="category-icon">{{ category.icon }}</span>
               <span class="category-name">{{ category.name }}</span>
             </h2>
-
             <div class="sites-grid">
               <a
                 v-for="site in category.sites"
@@ -140,35 +140,6 @@
               </a>
             </div>
           </section>
-
-          <!-- 页面底部信息 -->
-          <footer class="page-footer" hidden="true">
-            <div class="footer-content">
-              <div class="footer-info">
-                <h3>{{ title || '梅零落的导航' }}</h3>
-                <p>一个简洁、美观的导航网站，收录优质网站资源</p>
-              </div>
-
-              <div class="footer-links">
-                <a
-                  href="https://github.com/maodeyu180/mao_nav"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="footer-link"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                  </svg>
-                  开源项目
-                </a>
-              </div>
-            </div>
-
-            <div class="footer-bottom">
-              <p>&copy; {{ new Date().getFullYear() }} 梅零落的导航 - 由 <a href="https://github.com/maodeyu180" target="_blank" rel="noopener noreferrer">maodeyu180</a> 用 ❤️ 制作</p>
-              <p class="footer-tech">基于 Vue.js 构建 | <a href="https://github.com/maodeyu180/mao_nav" target="_blank" rel="noopener noreferrer">查看源代码</a></p>
-            </div>
-          </footer>
         </div>
       </div>
     </main>
@@ -191,6 +162,14 @@ const { categories, title, loading, error, fetchCategories } = useNavigation()
 const searchQuery = ref('') // 搜索查询
 const selectedEngine = ref('google') // 选中的搜索引擎
 const showMobileMenu = ref(false) // 移动端菜单显示状态
+const sidebarCollapsed = ref(false)
+const toggleSidebar = () => {
+  sidebarCollapsed.value = !sidebarCollapsed.value
+}
+const activeCategoryId = ref(null)
+const selectCategory = (id) => {
+  activeCategoryId.value = id
+}
 
 // 搜索引擎配置
 const searchEngines = {
@@ -304,6 +283,13 @@ const scrollToCategoryMobile = (categoryId) => {
   }, 200)
 }
 
+const isDark = ref(false)
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+  document.body.classList.toggle('dark', isDark.value)
+  document.body.classList.toggle('light', !isDark.value)
+}
+
 // 组件挂载时获取数据
 onMounted(() => {
   fetchCategories()
@@ -319,43 +305,89 @@ onMounted(() => {
 
 /* 左侧边栏样式 */
 .sidebar {
-  width: 280px;
-  background-color: #2c3e50;
-  color: white;
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+  transition: width 0.2s cubic-bezier(.4,2,.6,1), min-width 0.2s;
+  background: #fff;
+  color: #3a4266;
   padding: 0;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   height: 100vh;
   overflow: hidden;
   flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
-
+.sidebar.collapsed {
+  width: 56px;
+  min-width: 56px;
+  max-width: 56px;
+}
+.collapse-btn {
+  margin-right: 16px;
+  background: none;
+  border: none;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.collapse-btn:hover {
+  background: #f8f9fa;
+}
 .logo-section {
   display: flex;
   align-items: center;
-  padding: 20px;
+  height: 56px;
+  padding: 0 10px 0 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: flex-start;
+  min-height: 56px;
+  box-sizing: border-box;
 }
-
+.sidebar.collapsed .logo-section {
+  justify-content: center;
+  padding: 0;
+}
 .logo {
-  width: 55px;
-  height: 55px;
-  border-radius: 12px;
-  margin-right: 15px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  margin-right: 0;
+  transition: width 0.2s, height 0.2s, margin 0.2s;
 }
-
+.sidebar:not(.collapsed) .logo {
+  margin-right: 4px;
+}
+.sidebar.collapsed .logo {
+  width: 24px;
+  height: 24px;
+  margin-right: 0;
+}
 .site-title {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0;
-  color: white;
+  margin: 0 0 0 4px;
+  color: #3a4266;
+  transition: opacity 0.2s, font-size 0.2s, margin 0.2s;
+  white-space: nowrap;
 }
-
+.sidebar.collapsed .site-title {
+  display: none;
+}
 .category-nav {
   padding: 20px 0;
-  height: calc(100vh - 180px); /* 为底部留出空间 */
+  height: calc(100vh - 180px);
   overflow-y: auto;
 }
-
 .nav-title {
   font-size: 16px;
   font-weight: 600;
@@ -363,71 +395,121 @@ onMounted(() => {
   color: #bdc3c7;
   text-transform: uppercase;
   letter-spacing: 1px;
+  transition: opacity 0.2s;
 }
-
+.sidebar.collapsed .nav-title {
+  display: none;
+}
 .category-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
 .category-item {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
+  justify-content: center;
+  padding: 10px 0;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
   position: relative;
+  border-left: 3px solid transparent;
+  border-radius: 6px 0 0 6px;
+  width: 100%;
 }
-
+.sidebar.collapsed .category-item {
+  justify-content: center;
+  padding: 10px 0;
+  border-radius: 6px;
+}
 .category-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 4px 0 0 #3498db;
+  background-color: rgba(255,255,255,0.08);
+  border-left: 3px solid #3498db;
+  color: #fff;
 }
-
+.category-item.active {
+  background-color: rgba(52,152,219,0.18);
+  border-left: 3px solid #3498db;
+  color: #fff;
+}
+.category-item.active .category-icon,
+.category-item.active .category-name {
+  color: #fff;
+}
 .category-icon {
-  font-size: 18px;
-  margin-right: 12px;
-  width: 20px;
+  font-size: 20px;
+  width: 32px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
-
+.sidebar.collapsed .category-icon {
+  margin: 0;
+}
 .category-name {
   font-size: 15px;
   font-weight: 500;
+  transition: opacity 0.2s, color 0.2s;
+  margin-left: 8px;
 }
-
-/* 左侧边栏底部 */
+.sidebar.collapsed .category-name {
+  display: none;
+}
 .sidebar-footer {
-  padding: 20px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: auto;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 32px;
+  box-sizing: border-box;
 }
-
+.sidebar.collapsed .sidebar-footer {
+  padding: 0;
+}
 .github-link {
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #bdc3c7;
   text-decoration: none;
-  padding: 8px 12px;
+  padding: 0 6px;
   border-radius: 6px;
   transition: all 0.3s ease;
-  font-size: 14px;
+  font-size: 11px;
+  line-height: 1.1;
+  min-height: 20px;
+  min-width: 20px;
+  height: 28px;
 }
-
+.sidebar.collapsed .github-link span {
+  display: none;
+}
 .github-link:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   color: white;
   transform: translateY(-1px);
 }
-
 .github-link svg {
   margin-right: 8px;
   transition: transform 0.3s ease;
 }
-
 .github-link:hover svg {
   transform: scale(1.1);
+}
+.github-link span {
+  transition: opacity 0.2s;
 }
 
 /* 右侧主内容区样式 */
@@ -441,7 +523,7 @@ onMounted(() => {
 
 .search-header {
   background: white;
-  padding: 20px;
+  padding: 0 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
@@ -449,6 +531,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 15px;
+  height: 56px;
+  border-bottom: 2px solid #f0f1f5;
 }
 
 .search-container {
@@ -460,6 +544,8 @@ onMounted(() => {
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   flex: 1;
+  border: 2px solid #e3e8f0;
+  background: #fff;
 }
 
 @media (max-width: 768px) {
@@ -976,5 +1062,108 @@ onMounted(() => {
   .footer-bottom p {
     font-size: 12px;
   }
+}
+
+/* 侧边栏渐变色 */
+.sidebar {
+  background: linear-gradient(160deg, #b6c6f5 0%, #e6d6f5 100%);
+  color: #333;
+}
+.sidebar.dark {
+  background: linear-gradient(160deg, #23272e 0%, #31343b 100%);
+  color: #e0e0e0;
+}
+
+/* 主体背景色 */
+.nav-home {
+  background: #fff;
+}
+.nav-home.dark {
+  background: #23272e;
+}
+
+/* 侧边栏分类导航、开源项目等文字颜色优化 */
+.sidebar {
+  background: linear-gradient(160deg, #e3e8fa 0%, #f3eafd 100%);
+  color: #3a4266;
+}
+.sidebar .nav-title,
+.sidebar .category-name,
+.sidebar .github-link span {
+  color: #3a4266;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.sidebar .category-item.active .category-name,
+.sidebar .category-item:hover .category-name {
+  color: #5f2c82;
+}
+.sidebar .github-link {
+  color: #3a4266;
+}
+.sidebar .github-link:hover {
+  color: #fff;
+  background: #5f2c82;
+}
+
+/* 主体卡片和搜索栏边框加深 */
+.card-style {
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 2px 12px 0 rgba(120,130,255,0.06) inset, 0 4px 32px 0 rgba(80, 100, 150, 0.10);
+  border: 2px solid #e3e8f0;
+  padding: 32px 32px 48px 32px;
+  margin: 32px auto 0 auto;
+  max-width: 1200px;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+  color: #232a3d;
+}
+.nav-home.dark .card-style {
+  background: #23262b;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+  color: #fff;
+  border: 2px solid #353a45;
+}
+.nav-home.dark .site-name {
+  color: #fff;
+}
+.nav-home.dark .site-description {
+  color: #bfc6d1;
+}
+.nav-home.dark .search-container {
+  background: #23262b;
+  border: 2px solid #353a45;
+}
+.nav-home.dark .category-title,
+.nav-home.dark .site-icon img {
+  filter: brightness(0.8) grayscale(0.2);
+  color: #bbb;
+}
+.site-name {
+  color: #232a3d;
+  font-weight: 700;
+}
+.site-description {
+  color: #5a627a;
+  font-size: 15px;
+}
+
+/* 顶部搜索栏右侧主题切换按钮 */
+.theme-toggle-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+}
+.theme-toggle-btn:hover {
+  background: #f1f1f1;
+}
+.nav-home.dark .theme-toggle-btn:hover {
+  background: #333;
 }
 </style>

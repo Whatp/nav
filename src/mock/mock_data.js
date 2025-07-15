@@ -1,7 +1,7 @@
 export const mockData = {
   "categories": [
     {
-      "id": "my-favorites",
+      "id": "personal-site",
       "name": "个人网站",
       "icon": "💥",
       "order": 0,
@@ -16,7 +16,7 @@ export const mockData = {
       ]
     },
     {
-      "id": "my-favorites",
+      "id": "common-use",
       "name": "我的常用",
       "icon": "💥",
       "order": 0,
