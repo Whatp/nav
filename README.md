@@ -60,7 +60,7 @@
 1. 访问 [Vercel 官网](https://vercel.com/)
 2. 注册/登录 Vercel 账号（免费）
 3. 点击右上角 **"Add New"** → **"Project"**
-4. 选择你 Fork 的 `mao_nav` 仓库，点击 **"Import"**
+4. 选择你 Fork 的 `nav` 仓库，点击 **"Import"**
 5. 保持默认设置，Vercel 会自动检测到是 Vue 项目
    - **Framework Preset**: `Vite`
    - **Build Command**: `npm run build`
@@ -86,7 +86,7 @@
 
 1. 访问 [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens)
 2. 点击 "Generate new token" → "Generate new token (fine-grained token)"
-3. 设置 Token 名称，选择过期时间，并**只选择你的 mao_nav 仓库**（这样即使 token 泄露也不会影响你其他项目）
+3. 设置 Token 名称，选择过期时间，并**只选择你的 nav 仓库**（这样即使 token 泄露也不会影响你其他项目）
 4. 在 **Repository permissions (仓库权限)** 部分，勾选以下权限：
    - `Contents` - **Read and write** ✅  
      <span style="color:#888;font-size:13px;">用于读取和修改 <code>src/mock/mock_data.js</code> 文件，这是管理系统的核心功能</span>
@@ -140,7 +140,7 @@ npm run dev
 ### 项目结构
 
 ```
-mao_nav/
+nav/
 ├── src/
 │   ├── apis/           # API 接口
 │   ├── assets/         # 静态资源（图片、样式等）
