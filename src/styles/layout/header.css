@@ -1,0 +1,102 @@
+/* 头部导航样式 */
+.app-header {
+  height: var(--header-height);
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-lg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--spacing-lg);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* 菜单按钮 */
+.menu-button {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+}
+
+.menu-button:hover {
+  background-color: var(--color-background-mute);
+}
+
+/* 搜索框 */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--spacing-md) 0 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-background-soft);
+  color: var(--color-text);
+  font-size: 14px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-heading);
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text);
+  opacity: 0.6;
+}
+
+/* 主题切换按钮 */
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-background-mute);
+}

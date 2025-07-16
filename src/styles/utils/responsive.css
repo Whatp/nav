@@ -1,0 +1,202 @@
+/* 响应式工具类 */
+
+/* 移动端优先的响应式断点 */
+@media (max-width: 768px) {
+  /* 移动端布局调整 */
+  .app-layout {
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+  }
+
+  .app-sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    flex: 1;
+    height: 100vh;
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .menu-button {
+    display: flex;
+  }
+
+  /* 搜索框在移动端的调整 */
+  .search-container {
+    max-width: none;
+    flex: 1;
+  }
+
+  /* 网格在移动端的调整 */
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .sites-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 卡片在移动端的调整 */
+  .site-card {
+    padding: var(--spacing-sm);
+  }
+
+  .site-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* 表单在移动端的调整 */
+  .form-row {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  /* 按钮组在移动端的调整 */
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .btn-group .btn {
+    border-radius: var(--border-radius-md);
+    border-right-width: 1px;
+    border-bottom-width: 0;
+  }
+
+  .btn-group .btn:first-child {
+    border-radius: var(--border-radius-md);
+  }
+
+  .btn-group .btn:last-child {
+    border-radius: var(--border-radius-md);
+    border-bottom-width: 1px;
+  }
+}
+
+/* 平板端调整 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .sites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+/* 大屏幕调整 */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 1200px;
+  }
+
+  .sites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+/* 超大屏幕调整 */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .sites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+/* 显示/隐藏工具类 */
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  display: block !important;
+}
+
+/* 移动端显示/隐藏 */
+@media (max-width: 768px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  .visible-mobile {
+    display: block !important;
+  }
+}
+
+/* 桌面端显示/隐藏 */
+@media (min-width: 769px) {
+  .hidden-desktop {
+    display: none !important;
+  }
+
+  .visible-desktop {
+    display: block !important;
+  }
+}
+
+/* 文本对齐 */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* 间距工具类 */
+.m-0 { margin: 0; }
+.m-1 { margin: var(--spacing-xs); }
+.m-2 { margin: var(--spacing-sm); }
+.m-3 { margin: var(--spacing-md); }
+.m-4 { margin: var(--spacing-lg); }
+.m-5 { margin: var(--spacing-xl); }
+
+.p-0 { padding: 0; }
+.p-1 { padding: var(--spacing-xs); }
+.p-2 { padding: var(--spacing-sm); }
+.p-3 { padding: var(--spacing-md); }
+.p-4 { padding: var(--spacing-lg); }
+.p-5 { padding: var(--spacing-xl); }
+
+/* 边距方向 */
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+.mt-5 { margin-top: var(--spacing-xl); }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+.mb-5 { margin-bottom: var(--spacing-xl); }

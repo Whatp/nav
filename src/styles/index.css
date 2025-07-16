@@ -1,0 +1,13 @@
+/* 主样式入口文件 */
+@import './base/reset.css';
+@import './base/variables.css';
+@import './base/typography.css';
+@import './layout/app.css';
+@import './layout/header.css';
+@import './layout/sidebar.css';
+@import './components/buttons.css';
+@import './components/cards.css';
+@import './components/forms.css';
+@import './themes/light.css';
+@import './utils/responsive.css';
+@import './utils/animations.css';

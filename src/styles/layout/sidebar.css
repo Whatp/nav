@@ -1,0 +1,158 @@
+/* 侧边栏样式 */
+.app-sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--color-background);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), width var(--transition-normal);
+  position: relative;
+  z-index: 200;
+}
+
+.sidebar-collapsed {
+  width: 60px;
+}
+
+.sidebar-header {
+  height: var(--header-height);
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  gap: var(--spacing-md);
+}
+
+.sidebar-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-md);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity var(--transition-normal);
+}
+
+.sidebar-collapsed .sidebar-title {
+  opacity: 0;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md) 0;
+}
+
+/* 导航菜单 */
+.nav-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin: 0 var(--spacing-sm);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  gap: var(--spacing-md);
+  position: relative;
+}
+
+.nav-link:hover {
+  background-color: var(--color-background-mute);
+  color: var(--color-heading);
+}
+
+.nav-link.active {
+  background-color: var(--color-background-mute);
+  color: var(--color-heading);
+}
+
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: var(--color-heading);
+  border-radius: 0 2px 2px 0;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.nav-text {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity var(--transition-normal);
+}
+
+.sidebar-collapsed .nav-text {
+  opacity: 0;
+}
+
+/* 折叠按钮 */
+.sidebar-toggle {
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+  z-index: 10;
+}
+
+.sidebar-toggle:hover {
+  background-color: var(--color-background-mute);
+}
+
+.sidebar-toggle-icon {
+  width: 12px;
+  height: 12px;
+  transition: transform var(--transition-normal);
+}
+
+.sidebar-collapsed .sidebar-toggle-icon {
+  transform: rotate(180deg);
+}

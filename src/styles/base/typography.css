@@ -1,0 +1,76 @@
+/* 字体和排版样式 */
+body {
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color var(--transition-slow), background-color var(--transition-slow);
+}
+
+/* 标题样式 */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-heading);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+/* 段落样式 */
+p {
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+}
+
+/* 链接样式 */
+a {
+  color: var(--color-text);
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-heading);
+}
+
+/* 代码样式 */
+code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  background-color: var(--color-background-mute);
+  padding: 2px 4px;
+  border-radius: var(--border-radius-sm);
+}
+
+pre {
+  background-color: var(--color-background-mute);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-md);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}

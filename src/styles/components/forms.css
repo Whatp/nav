@@ -1,0 +1,181 @@
+/* 表单组件样式 */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-control {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 1.5;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--color-heading);
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+}
+
+.form-control:disabled {
+  background-color: var(--color-background-mute);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-control::placeholder {
+  color: var(--color-text);
+  opacity: 0.6;
+}
+
+/* 表单控件尺寸 */
+.form-control-sm {
+  padding: var(--spacing-sm);
+  font-size: 12px;
+}
+
+.form-control-lg {
+  padding: var(--spacing-lg);
+  font-size: 16px;
+}
+
+/* 文本域 */
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* 选择框 */
+select.form-control {
+  cursor: pointer;
+}
+
+/* 复选框和单选框 */
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.form-check-input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.form-check-label {
+  font-size: 14px;
+  color: var(--color-text);
+  cursor: pointer;
+  margin: 0;
+}
+
+/* 输入组 */
+.input-group {
+  display: flex;
+  width: 100%;
+}
+
+.input-group .form-control {
+  border-radius: 0;
+  border-right: 0;
+}
+
+.input-group .form-control:first-child {
+  border-top-left-radius: var(--border-radius-md);
+  border-bottom-left-radius: var(--border-radius-md);
+}
+
+.input-group .form-control:last-child {
+  border-top-right-radius: var(--border-radius-md);
+  border-bottom-right-radius: var(--border-radius-md);
+  border-right: 1px solid var(--color-border);
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--color-background-mute);
+  border: 1px solid var(--color-border);
+  border-left: 0;
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.input-group-text:first-child {
+  border-left: 1px solid var(--color-border);
+  border-right: 0;
+  border-top-left-radius: var(--border-radius-md);
+  border-bottom-left-radius: var(--border-radius-md);
+}
+
+.input-group-text:last-child {
+  border-top-right-radius: var(--border-radius-md);
+  border-bottom-right-radius: var(--border-radius-md);
+}
+
+/* 表单验证状态 */
+.form-control.is-valid {
+  border-color: #10b981;
+}
+
+.form-control.is-valid:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.form-control.is-invalid {
+  border-color: #ef4444;
+}
+
+.form-control.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.valid-feedback {
+  display: block;
+  font-size: 12px;
+  color: #10b981;
+  margin-top: var(--spacing-xs);
+}
+
+.invalid-feedback {
+  display: block;
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: var(--spacing-xs);
+}
+
+/* 表单布局 */
+.form-row {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-col {
+  flex: 1;
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--spacing-lg);
+}

@@ -1,0 +1,53 @@
+/* 浅色主题样式 */
+.light {
+  --color-background: #ffffff;
+  --color-background-soft: #f8f8f8;
+  --color-background-mute: #f2f2f2;
+
+  --color-border: rgba(60, 60, 60, 0.12);
+  --color-border-hover: rgba(60, 60, 60, 0.29);
+
+  --color-heading: #2c3e50;
+  --color-text: #2c3e50;
+}
+
+/* 浅色主题下的特殊调整 */
+.light .app-layout {
+  background-color: #f5f7fa;
+}
+
+.light .site-card {
+  background: var(--color-background);
+  border-color: var(--color-border);
+}
+
+.light .site-card:hover {
+  background: var(--color-background-soft);
+}
+
+.light .category-card {
+  background: var(--color-background);
+  border-color: var(--color-border);
+}
+
+.light .app-header {
+  background: var(--color-background);
+  border-color: var(--color-border);
+}
+
+.light .app-sidebar {
+  background: var(--color-background);
+  border-color: var(--color-border);
+}
+
+.light .search-input {
+  background: var(--color-background-soft);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.light .form-control {
+  background: var(--color-background);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}

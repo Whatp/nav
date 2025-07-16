@@ -1,0 +1,130 @@
+/* 按钮组件样式 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  gap: var(--spacing-sm);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 按钮尺寸 */
+.btn-sm {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 12px;
+}
+
+.btn-lg {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 16px;
+}
+
+/* 按钮变体 */
+.btn-primary {
+  background-color: var(--color-heading);
+  color: white;
+  border-color: var(--color-heading);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+}
+
+.btn-secondary {
+  background-color: var(--color-background-mute);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-background-soft);
+  border-color: var(--color-border-hover);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-heading);
+  border-color: var(--color-heading);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--color-heading);
+  color: white;
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-text);
+  border-color: transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--color-background-mute);
+}
+
+.btn-danger {
+  background-color: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #dc2626;
+  border-color: #dc2626;
+}
+
+/* 按钮组 */
+.btn-group {
+  display: inline-flex;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.btn-group .btn {
+  border-radius: 0;
+  border-right-width: 0;
+}
+
+.btn-group .btn:first-child {
+  border-top-left-radius: var(--border-radius-md);
+  border-bottom-left-radius: var(--border-radius-md);
+}
+
+.btn-group .btn:last-child {
+  border-top-right-radius: var(--border-radius-md);
+  border-bottom-right-radius: var(--border-radius-md);
+  border-right-width: 1px;
+}
+
+/* 图标按钮 */
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--border-radius-md);
+}
+
+.btn-icon-sm {
+  width: 32px;
+  height: 32px;
+}
+
+.btn-icon-lg {
+  width: 48px;
+  height: 48px;
+}
