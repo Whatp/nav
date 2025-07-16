@@ -30,7 +30,7 @@
 
         <div class="footer-bottom">
             <div class="copyright">
-                <p>&copy; 2025 梅零落的导航. All rights reserved.</p>
+                <p> 梅零落的导航</p>
                 <p>Built with ❤️ using Vue.js & Vite</p>
             </div>
         </div>
