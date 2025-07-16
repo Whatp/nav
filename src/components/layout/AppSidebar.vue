@@ -290,11 +290,10 @@ const handleCategoryClick = (categoryId) => {
   font-size: 15px;
   font-weight: 600;
   transition: opacity 0.2s, color 0.2s;
-  margin-left: 8px;
+  margin-left: 6px; /* 添加小间距，类似图片中的效果 */
   color: #3a4266;
   letter-spacing: 0.5px;
-  text-align: center;
-  /* 文本居中 */
+  text-align: left; /* 改为左对齐 */
   flex: 1;
   /* 占据剩余空间 */
 }
