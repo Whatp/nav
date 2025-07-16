@@ -24,6 +24,9 @@
       <!-- 主要内容 -->
       <slot />
     </main>
+    
+    <!-- 返回顶部按钮 -->
+    <BackToTop />
   </div>
 </template>
 
@@ -32,6 +35,7 @@ import { useSidebar } from '@/composables/useSidebar'
 import { useScroll } from '@/composables/useScroll'
 import AppSidebar from './AppSidebar.vue'
 import AppHeader from './AppHeader.vue'
+import BackToTop from '../common/BackToTop.vue'
 
 // Props
 defineProps({

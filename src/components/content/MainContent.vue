@@ -20,11 +20,15 @@
         :category="category"
       />
     </div>
+    
+    <!-- 页脚 -->
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
 import CategorySection from './CategorySection.vue'
+import AppFooter from '../layout/AppFooter.vue'
 
 // Props
 defineProps({
@@ -51,11 +55,12 @@ defineEmits(['retry'])
 .content-area {
   flex: 1;
   padding: 30px;
-  padding-bottom: 400px;
+  padding-bottom: 60px;
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
   box-sizing: border-box;
+  min-height: 0; /* 确保flex子元素可以收缩 */
 }
 
 .loading, .error {
