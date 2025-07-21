@@ -7,25 +7,53 @@
       <span class="category-icon">{{ category.icon }}</span>
       <span class="category-name">{{ category.name }}</span>
     </h2>
-    <div class="sites-grid">
+    
+    <!-- 如果有子分类，显示子分类 -->
+    <div v-if="hasSubCategories" class="subcategories-container">
+      <SubCategorySection
+        v-for="subCategory in category.categories"
+        :key="subCategory.id"
+        :category="subCategory"
+      />
+    </div>
+    
+    <!-- 如果有网站，显示网站 -->
+    <div v-else-if="hasSites" class="sites-grid">
       <SiteCard
         v-for="site in category.sites"
         :key="site.id"
         :site="site"
       />
     </div>
+    
+    <!-- 如果既没有子分类也没有网站，显示空状态 -->
+    <div v-else class="empty-category">
+      <p>暂无内容</p>
+    </div>
   </section>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import SiteCard from './SiteCard.vue'
+import SubCategorySection from './SubCategorySection.vue'
 
 // Props
-defineProps({
+const props = defineProps({
   category: {
     type: Object,
     required: true
   }
+})
+
+// 计算属性：是否有子分类
+const hasSubCategories = computed(() => {
+  return props.category.categories && props.category.categories.length > 0
+})
+
+// 计算属性：是否有网站
+const hasSites = computed(() => {
+  return props.category.sites && props.category.sites.length > 0
 })
 </script>
 
@@ -59,6 +87,21 @@ defineProps({
   gap: 20px;
 }
 
+.subcategories-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.empty-category {
+  padding: 20px;
+  text-align: center;
+  color: #95a5a6;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px dashed #e9ecef;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .sites-grid {
@@ -88,5 +131,11 @@ defineProps({
 
 :global(.dark) .category-title .category-icon {
   filter: brightness(1.2);
+}
+
+:global(.dark) .empty-category {
+  background: #1e1f2a;
+  color: #95a5a6;
+  border-color: #333333;
 }
 </style>
