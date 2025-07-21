@@ -438,6 +438,331 @@ export const mockData = {
           "icon": "https://www.feishu.cn/favicon.ico"
         }
       ]
+    },
+    {
+      "id": "essential-tools",
+      "name": "装机必备",
+      "icon": "💻",
+      "order": 10,
+      "categories": [
+        {
+          "id": "package-managers",
+          "name": "包管理器",
+          "icon": "📦",
+          "order": 1,
+          "sites": [
+            {
+              "id": "unigetui",
+              "name": "UniGetUI",
+              "url": "https://github.com/marticliment/UniGetUI",
+              "description": "图形化包管理器前端",
+              "icon": "https://github.com/favicon.ico"
+            },
+            {
+              "id": "winget",
+              "name": "Winget",
+              "url": "https://learn.microsoft.com/windows/package-manager/winget",
+              "description": "微软官方包管理器",
+              "icon": "https://learn.microsoft.com/favicon.ico"
+            },
+            {
+              "id": "scoop",
+              "name": "Scoop",
+              "url": "https://scoop.sh",
+              "description": "便携式软件安装",
+              "icon": "https://scoop.sh/favicon.ico"
+            },
+            {
+              "id": "chocolatey",
+              "name": "Chocolatey",
+              "url": "https://chocolatey.org",
+              "description": "传统安装包管理",
+              "icon": "https://chocolatey.org/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "system-optimization",
+          "name": "系统优化",
+          "icon": "⚙️",
+          "order": 2,
+          "sites": [
+            {
+              "id": "winutil",
+              "name": "WinUtil",
+              "url": "https://github.com/ChrisTitusTech/winutil",
+              "description": "PowerShell优化工具集",
+              "icon": "https://github.com/favicon.ico"
+            },
+            {
+              "id": "ccleaner",
+              "name": "CCleaner",
+              "url": "https://www.ccleaner.com",
+              "description": "系统清理工具",
+              "icon": "https://www.ccleaner.com/favicon.ico"
+            },
+            {
+              "id": "bleachbit",
+              "name": "BleachBit",
+              "url": "https://www.bleachbit.org",
+              "description": "轻量隐私清理工具",
+              "icon": "https://www.bleachbit.org/favicon.ico"
+            },
+            {
+              "id": "dismplusplus",
+              "name": "Dism++",
+              "url": "https://github.com/Chuyu-Team/Dism-Multi-language",
+              "description": "系统深度优化工具",
+              "icon": "https://github.com/favicon.ico"
+            },
+            {
+              "id": "mem-reduct",
+              "name": "Mem Reduct",
+              "url": "https://memreduct.org",
+              "description": "内存监控清理工具",
+              "icon": "https://memreduct.org/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "uninstall-tools",
+          "name": "卸载工具",
+          "icon": "🗑️",
+          "order": 3,
+          "sites": [
+            {
+              "id": "geek-uninstaller",
+              "name": "Geek Uninstaller",
+              "url": "https://geekuninstaller.com",
+              "description": "深度卸载清理",
+              "icon": "https://geekuninstaller.com/favicon.ico"
+            },
+            {
+              "id": "revo-uninstaller",
+              "name": "Revo Uninstaller",
+              "url": "https://www.revouninstaller.com",
+              "description": "高级卸载工具",
+              "icon": "https://www.revouninstaller.com/favicon.ico"
+            },
+            {
+              "id": "autoruns",
+              "name": "Autoruns",
+              "url": "https://learn.microsoft.com/sysinternals/autoruns",
+              "description": "启动项管理",
+              "icon": "https://learn.microsoft.com/favicon.ico"
+            },
+            {
+              "id": "contextmenumanager",
+              "name": "ContextMenuManager",
+              "url": "https://github.com/BluePointLilac/ContextMenuManager",
+              "description": "右键菜单管理",
+              "icon": "https://github.com/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "disk-file-management",
+          "name": "磁盘文件管理",
+          "icon": "💾",
+          "order": 4,
+          "sites": [
+            {
+              "id": "wiztree",
+              "name": "WizTree",
+              "url": "https://www.diskanalyzer.com",
+              "description": "磁盘空间分析",
+              "icon": "https://www.diskanalyzer.com/favicon.ico"
+            },
+            {
+              "id": "everything",
+              "name": "Everything",
+              "url": "https://www.voidtools.com",
+              "description": "极速文件搜索",
+              "icon": "https://www.voidtools.com/favicon.ico"
+            },
+            {
+              "id": "listary",
+              "name": "Listary",
+              "url": "https://www.listary.com",
+              "description": "文件搜索启动器",
+              "icon": "https://www.listary.com/favicon.ico"
+            },
+            {
+              "id": "fluentsearch",
+              "name": "Fluent Search",
+              "url": "https://fluentsearch.net",
+              "description": "智能化全局搜索",
+              "icon": "https://fluentsearch.net/favicon.ico"
+            },
+            {
+              "id": "bulkrenameutility",
+              "name": "Bulk Rename Utility",
+              "url": "https://www.bulkrenameutility.co.uk",
+              "description": "批量重命名工具",
+              "icon": "https://www.bulkrenameutility.co.uk/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "compression-tools",
+          "name": "压缩解压",
+          "icon": "📁",
+          "order": 5,
+          "sites": [
+            {
+              "id": "nanazip",
+              "name": "NanaZip",
+              "url": "https://github.com/M2Team/NanaZip",
+              "description": "现代化压缩工具",
+              "icon": "https://github.com/favicon.ico"
+            },
+            {
+              "id": "bandizip",
+              "name": "Bandizip",
+              "url": "https://www.bandisoft.com/bandizip",
+              "description": "多格式压缩支持",
+              "icon": "https://www.bandisoft.com/favicon.ico"
+            },
+            {
+              "id": "7zip",
+              "name": "7-Zip",
+              "url": "https://www.7-zip.org",
+              "description": "高压缩率工具",
+              "icon": "https://www.7-zip.org/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "media-tools",
+          "name": "媒体工具",
+          "icon": "🎬",
+          "order": 6,
+          "sites": [
+            {
+              "id": "potplayer",
+              "name": "PotPlayer",
+              "url": "https://potplayer.daum.net",
+              "description": "全能视频播放器",
+              "icon": "https://potplayer.daum.net/favicon.ico"
+            },
+            {
+              "id": "imageglass",
+              "name": "ImageGlass",
+              "url": "https://imageglass.org",
+              "description": "现代图片查看器",
+              "icon": "https://imageglass.org/favicon.ico"
+            },
+            {
+              "id": "obs-studio",
+              "name": "OBS Studio",
+              "url": "https://obsproject.com",
+              "description": "专业录屏直播",
+              "icon": "https://obsproject.com/favicon.ico"
+            },
+            {
+              "id": "lxmusic",
+              "name": "LX Music",
+              "url": "https://github.com/lyswhut/lx-music-desktop",
+              "description": "多平台音乐聚合",
+              "icon": "https://github.com/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "efficiency-tools",
+          "name": "效率工具",
+          "icon": "🚀",
+          "order": 7,
+          "sites": [
+            {
+              "id": "powertoys",
+              "name": "PowerToys",
+              "url": "https://github.com/microsoft/PowerToys",
+              "description": "Windows增强工具集",
+              "icon": "https://github.com/favicon.ico"
+            },
+            {
+              "id": "quicker",
+              "name": "Quicker",
+              "url": "https://getquicker.net",
+              "description": "自动化效率平台",
+              "icon": "https://getquicker.net/favicon.ico"
+            },
+            {
+              "id": "ditto",
+              "name": "Ditto",
+              "url": "https://ditto-cp.sourceforge.io",
+              "description": "剪贴板历史管理",
+              "icon": "https://sourceforge.net/favicon.ico"
+            },
+            {
+              "id": "translucenttb",
+              "name": "TranslucentTB",
+              "url": "https://github.com/TranslucentTB/TranslucentTB",
+              "description": "任务栏透明化",
+              "icon": "https://github.com/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "network-tools",
+          "name": "网络工具",
+          "icon": "🌐",
+          "order": 8,
+          "sites": [
+            {
+              "id": "glasswire",
+              "name": "GlassWire",
+              "url": "https://www.glasswire.com",
+              "description": "网络流量监控",
+              "icon": "https://www.glasswire.com/favicon.ico"
+            },
+            {
+              "id": "localsend",
+              "name": "LocalSend",
+              "url": "https://localsend.org",
+              "description": "局域网文件传输",
+              "icon": "https://localsend.org/favicon.ico"
+            },
+            {
+              "id": "idm",
+              "name": "IDM",
+              "url": "https://www.internetdownloadmanager.com",
+              "description": "多线程下载工具",
+              "icon": "https://www.internetdownloadmanager.com/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "development-tools",
+          "name": "开发工具",
+          "icon": "💻",
+          "order": 9,
+          "sites": [
+            {
+              "id": "vscode",
+              "name": "VS Code",
+              "url": "https://code.visualstudio.com",
+              "description": "现代化代码编辑器",
+              "icon": "https://code.visualstudio.com/favicon.ico"
+            },
+            {
+              "id": "ffmpeg",
+              "name": "FFmpeg",
+              "url": "https://ffmpeg.org",
+              "description": "多媒体处理工具",
+              "icon": "https://ffmpeg.org/favicon.ico"
+            },
+            {
+              "id": "openwebui",
+              "name": "OpenWebUI",
+              "url": "https://github.com/open-webui/open-webui",
+              "description": "大语言模型前端",
+              "icon": "https://github.com/favicon.ico"
+            }
+          ]
+        }
+      ]
     }
   ],
   "title": "梅零落的导航"
