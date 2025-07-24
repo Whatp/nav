@@ -142,13 +142,50 @@ export const mockData = {
       "name": "开发工具",
       "icon": "🛠️",
       "order": 3,
-      "sites": [
+      "categories": [
         {
-          "id": "github",
-          "name": "GitHub",
-          "url": "https://github.com",
-          "description": "代码托管平台",
-          "icon": "https://github.com/favicon.ico"
+          "id": "code-editors",
+          "name": "代码编辑器",
+          "icon": "📝",
+          "order": 1,
+          "sites": [
+            {
+              "id": "vscode",
+              "name": "VS Code",
+              "url": "https://code.visualstudio.com",
+              "description": "现代化代码编辑器",
+              "icon": "https://code.visualstudio.com/favicon.ico"
+            },
+            {
+              "id": "webstorm",
+              "name": "WebStorm",
+              "url": "https://www.jetbrains.com/webstorm",
+              "description": "专业的JavaScript IDE",
+              "icon": "https://www.jetbrains.com/favicon.ico"
+            }
+          ]
+        },
+        {
+          "id": "version-control",
+          "name": "版本控制",
+          "icon": "🔄",
+          "order": 2,
+          "sites": [
+            {
+              "id": "github",
+              "name": "GitHub",
+              "url": "https://github.com",
+              "description": "代码托管平台",
+              "icon": "https://github.com/favicon.ico"
+            },
+            {
+              "id": "gitlab",
+              "name": "GitLab",
+              "url": "https://gitlab.com",
+              "description": "DevOps平台",
+              "icon": "https://gitlab.com/favicon.ico"
+            }
+          ]
         }
       ]
     },

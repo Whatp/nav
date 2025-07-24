@@ -1,5 +1,5 @@
 <template>
-    <div class="subcategory-section">
+    <div class="subcategory-section" :id="`category-${category.id}`">
         <h3 class="subcategory-title">
             <span class="subcategory-icon">{{ category.icon }}</span>
             <span class="subcategory-name">{{ category.name }}</span>
@@ -11,15 +11,17 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import SiteCard from './SiteCard.vue'
 
 // Props
-defineProps({
+const props = defineProps({
     category: {
         type: Object,
         required: true
     }
 })
+
 </script>
 
 <style scoped>
@@ -28,12 +30,17 @@ defineProps({
 }
 
 .subcategory-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #2c3e50;
-    display: flex;
-    align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.subcategory-title:hover {
+  cursor: default;
 }
 
 .subcategory-title .subcategory-icon {

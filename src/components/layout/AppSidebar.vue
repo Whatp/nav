@@ -10,21 +10,48 @@
     <nav class="category-nav">
       <h2 class="nav-title" v-show="!collapsed">分类导航</h2>
       <ul class="category-list">
-        <li v-for="category in categories" :key="category.id" class="category-item" 
-          :class="{
-            active: activeCategoryId === category.id,
-            'ai-item': category.name.includes('AI') || category.name.includes('智能'),
-            'cloud-item': category.name.includes('云') || category.name.includes('服务')
-          }" 
-          @click="handleCategoryClick(category.id)"
-        >
-          <div class="category-icon-wrapper">
-            <span class="category-icon">{{ category.icon }}</span>
-            <!-- 收起状态下的悬停提示 -->
-            <div v-if="collapsed" class="tooltip">{{ category.name }}</div>
-          </div>
-          <span class="category-name" v-show="!collapsed">{{ category.name }}</span>
-        </li>
+        <template v-for="category in categories" :key="category.id">
+          <li class="category-item"
+            :class="{
+              active: activeCategoryId === category.id,
+              'ai-item': category.name.includes('AI') || category.name.includes('智能'),
+              'cloud-item': category.name.includes('云') || category.name.includes('服务'),
+              'has-subcategories': category.categories && category.categories.length > 0
+            }"
+            @click="handleCategoryClick(category.id)"
+          >
+            <div class="category-icon-wrapper">
+              <span class="category-icon">{{ category.icon }}</span>
+              <!-- 收起状态下的悬停提示 -->
+              <div v-if="collapsed" class="tooltip">{{ category.name }}</div>
+            </div>
+            <span class="category-name" v-show="!collapsed">{{ category.name }}</span>
+            <!-- 展开/收起图标 -->
+            <span
+              v-if="category.categories && category.categories.length > 0 && !collapsed"
+              class="expand-icon"
+              :class="{ 'expanded': expandedCategories[category.id] }"
+            >
+              ▼
+            </span>
+          </li>
+          
+          <!-- 二级分类 -->
+          <template v-if="category.categories && category.categories.length > 0 && expandedCategories[category.id] && !collapsed">
+            <li
+              v-for="subCategory in category.categories"
+              :key="subCategory.id"
+              class="subcategory-item"
+              :class="{ active: activeCategoryId === subCategory.id }"
+              @click.stop="handleSubCategoryClick(subCategory.id, category.id)"
+            >
+              <div class="subcategory-icon-wrapper">
+                <span class="subcategory-icon">{{ subCategory.icon }}</span>
+              </div>
+              <span class="subcategory-name">{{ subCategory.name }}</span>
+            </li>
+          </template>
+        </template>
       </ul>
     </nav>
 
@@ -43,8 +70,10 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
 // Props
-defineProps({
+const props = defineProps({
   collapsed: {
     type: Boolean,
     default: false
@@ -66,10 +95,50 @@ defineProps({
 // Emits
 const emit = defineEmits(['toggle-sidebar', 'select-category', 'scroll-to-category'])
 
+// 二级菜单展开状态
+const expandedCategories = ref({})
+
+// 初始化所有具有子分类的分类为收起状态
+import { watch } from 'vue'
+
+watch(
+  () => props.categories,
+  (newCategories) => {
+    if (newCategories && newCategories.length > 0) {
+      newCategories.forEach(category => {
+        if (category.categories && category.categories.length > 0) {
+          // 默认收起所有二级菜单
+          expandedCategories.value[category.id] = false
+        }
+      })
+    }
+  },
+  { immediate: true }
+)
+
+// 切换二级菜单展开状态
+const toggleSubCategory = (categoryId) => {
+  expandedCategories.value[categoryId] = !expandedCategories.value[categoryId]
+}
+
 // 处理分类点击
 const handleCategoryClick = (categoryId) => {
-  emit('select-category', categoryId)
-  emit('scroll-to-category', categoryId)
+  // 检查是否有子分类
+  const category = props.categories.find(cat => cat.id === categoryId)
+  if (category && category.categories && category.categories.length > 0) {
+    // 如果有子分类，则切换展开状态
+    toggleSubCategory(categoryId)
+  } else {
+    // 如果没有子分类，则触发导航
+    emit('select-category', categoryId)
+    emit('scroll-to-category', categoryId)
+  }
+}
+
+// 处理子分类点击
+const handleSubCategoryClick = (subCategoryId, parentCategoryId) => {
+  emit('select-category', subCategoryId)
+  emit('scroll-to-category', subCategoryId)
 }
 </script>
 
@@ -80,8 +149,8 @@ const handleCategoryClick = (categoryId) => {
   min-width: 160px;
   max-width: 160px;
   transition: width 0.2s cubic-bezier(.4, 2, .6, 1), min-width 0.2s;
-  background: linear-gradient(160deg, #e3e8fa 0%, #f3eafd 100%);
-  color: #3a4266;
+  background: #001529;
+  color: #ffffff;
   padding: 0;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   height: 100vh;
@@ -136,9 +205,10 @@ const handleCategoryClick = (categoryId) => {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 0 4px;
-  color: #3a4266;
+  color: #ffffff;
   transition: opacity 0.2s, font-size 0.2s, margin 0.2s;
   white-space: nowrap;
+  cursor: default;
 }
 
 .category-nav {
@@ -161,7 +231,7 @@ const handleCategoryClick = (categoryId) => {
   font-size: 16px;
   font-weight: 600;
   margin: 0 20px 15px;
-  color: #3a4266;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: opacity 0.2s;
@@ -201,34 +271,33 @@ const handleCategoryClick = (categoryId) => {
 }
 
 .category-item:hover {
-  background-color: rgba(95, 44, 130, 0.1);
-  border-left: 3px solid #5f2c82;
-  color: #5f2c82;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
 }
 
 .category-item.active {
-  background-color: rgba(95, 44, 130, 0.18);
-  border-left: 3px solid #5f2c82;
-  color: #5f2c82;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-left: 3px solid #ffffff;
 }
 
 .category-item.active .category-icon,
 .category-item.active .category-name {
-  color: #5f2c82;
+  color: #ffffff;
 }
 
 .category-icon-wrapper {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent; /* 确保背景透明 */
 }
 
 .category-icon {
-  font-size: 20px;
-  width: 32px;
+  font-size: 16px;
+  width: 24px;
   height: 24px;
-  /* 固定高度确保所有图标垂直居中 */
   text-align: center;
   display: flex;
   align-items: center;
@@ -238,6 +307,7 @@ const handleCategoryClick = (categoryId) => {
   /* 防止图标被压缩 */
   line-height: 1;
   /* 确保所有图标垂直居中 */
+  background: transparent; /* 确保背景透明 */
 }
 
 /* 特殊处理AI智能和云服务图标 */
@@ -291,11 +361,21 @@ const handleCategoryClick = (categoryId) => {
   font-weight: 600;
   transition: opacity 0.2s, color 0.2s;
   margin-left: 6px; /* 添加小间距，类似图片中的效果 */
-  color: #3a4266;
+  color: #ffffff;
   letter-spacing: 0.5px;
   text-align: left; /* 改为左对齐 */
   flex: 1;
   /* 占据剩余空间 */
+}
+
+.expand-icon {
+  margin-left: 4px; /* 将图标与文字靠近一些 */
+  font-size: 12px; /* 调整图标大小 */
+  transition: transform 0.2s ease; /* 添加旋转动画 */
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg); /* 展开时旋转180度 */
 }
 
 .sidebar-footer {
@@ -318,7 +398,7 @@ const handleCategoryClick = (categoryId) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #3a4266;
+  color: #ffffff;
   text-decoration: none;
   padding: 4px 8px;
   border-radius: 6px;
@@ -357,6 +437,58 @@ const handleCategoryClick = (categoryId) => {
 }
 
 
+
+/* 二级分类样式 */
+.subcategory-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0 8px 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  border-left: 3px solid transparent;
+  border-radius: 6px 0 0 6px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.subcategory-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.subcategory-item.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-left: 3px solid #ffffff;
+}
+
+.subcategory-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.subcategory-icon {
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subcategory-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-align: left;
+  flex: 1;
+}
 
 /* 响应式设计 */
 @media (max-width: 768px) {

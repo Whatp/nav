@@ -69,6 +69,7 @@ const hasSites = computed(() => {
   color: #2c3e50;
   display: flex;
   align-items: center;
+  cursor: default;
 }
 
 .category-title .category-icon {
@@ -91,6 +92,34 @@ const hasSites = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 30px;
+}
+
+.subcategory-item {
+  margin-bottom: 30px;
+}
+
+.subcategory-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.subcategory-title:hover {
+  cursor: default;
+}
+
+.subcategory-title .subcategory-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.subcategory-title .subcategory-name {
+  margin-left: 8px;
+  font-size: 20px;
 }
 
 .empty-category {
@@ -137,5 +166,13 @@ const hasSites = computed(() => {
   background: #1e1f2a;
   color: #95a5a6;
   border-color: #333333;
+}
+
+:global(.dark) .subcategory-title {
+  color: #ffffff;
+}
+
+:global(.dark) .subcategory-title .subcategory-icon {
+  filter: brightness(1.2);
 }
 </style>
