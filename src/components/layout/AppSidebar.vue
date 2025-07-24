@@ -37,7 +37,7 @@
           </li>
           
           <!-- 二级分类 -->
-          <template v-if="category.categories && category.categories.length > 0 && expandedCategories[category.id] && !collapsed">
+          <template v-if="category.categories && category.categories.length > 0 && (expandedCategories[category.id] !== undefined ? expandedCategories[category.id] : false) && !collapsed">
             <li
               v-for="subCategory in category.categories"
               :key="subCategory.id"

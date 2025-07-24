@@ -62,65 +62,65 @@
             </div>
           </div>
         </div>
-      </div>
-      
-      <!-- 二级分类列表 -->
-      <div v-if="category.categories && category.categories.length > 0" class="subcategories-list">
-        <div
-          v-for="(subCategory, subIndex) in category.categories"
-          :key="subCategory.id"
-          class="subcategory-item"
-        >
-          <div class="subcategory-header">
-            <div class="subcategory-info">
-              <span class="subcategory-icon" @click="editSubCategory(category.id, subCategory)">
-                {{ subCategory.icon }}
-              </span>
-              <div class="subcategory-details">
-                <h4 @click="editSubCategory(category.id, subCategory)">{{ subCategory.name }}</h4>
-                <p>{{ subCategory.sites?.length || 0 }} 个站点</p>
-              </div>
-            </div>
-            <div class="subcategory-actions">
-              <span class="order-badge">排序: {{ subCategory.order }}</span>
-              <button @click="moveSubCategory(category.id, subIndex, -1)" :disabled="subIndex === 0" class="move-btn">
-                ⬆️
-              </button>
-              <button @click="moveSubCategory(category.id, subIndex, 1)" :disabled="subIndex === category.categories.length - 1" class="move-btn">
-                ⬇️
-              </button>
-              <button @click="editSubCategory(category.id, subCategory)" class="edit-btn">
-                ✏️ 编辑
-              </button>
-              <button @click="deleteSubCategory(category.id, subCategory.id)" class="delete-btn">
-                🗑️ 删除
-              </button>
-            </div>
-          </div>
 
-          <!-- 二级分类站点预览 -->
-          <div class="sites-preview" v-if="subCategory.sites && subCategory.sites.length > 0">
-            <div class="sites-grid">
-              <div
-                v-for="site in subCategory.sites.slice(0, 6)"
-                :key="site.id"
-                class="site-preview"
-              >
-                <img :src="site.icon" :alt="site.name" @error="handleImageError">
-                <span>{{ site.name }}</span>
+        <!-- 二级分类列表 -->
+        <div v-if="category.categories && category.categories.length > 0" class="subcategories-list">
+          <div
+            v-for="(subCategory, subIndex) in category.categories"
+            :key="subCategory.id"
+            class="subcategory-item"
+          >
+            <div class="subcategory-header">
+              <div class="subcategory-info">
+                <span class="subcategory-icon" @click="editSubCategory(category.id, subCategory)">
+                  {{ subCategory.icon }}
+                </span>
+                <div class="subcategory-details">
+                  <h4 @click="editSubCategory(category.id, subCategory)">{{ subCategory.name }}</h4>
+                  <p>{{ subCategory.sites?.length || 0 }} 个站点</p>
+                </div>
               </div>
-              <div v-if="subCategory.sites.length > 6" class="more-sites">
-                +{{ subCategory.sites.length - 6 }} 更多
+              <div class="subcategory-actions">
+                <span class="order-badge">排序: {{ subCategory.order }}</span>
+                <button @click="moveSubCategory(category.id, subIndex, -1)" :disabled="subIndex === 0" class="move-btn">
+                  ⬆️
+                </button>
+                <button @click="moveSubCategory(category.id, subIndex, 1)" :disabled="subIndex === category.categories.length - 1" class="move-btn">
+                  ⬇️
+                </button>
+                <button @click="editSubCategory(category.id, subCategory)" class="edit-btn">
+                  ✏️ 编辑
+                </button>
+                <button @click="deleteSubCategory(category.id, subCategory.id)" class="delete-btn">
+                  🗑️ 删除
+                </button>
+              </div>
+            </div>
+
+            <!-- 二级分类站点预览 -->
+            <div class="sites-preview" v-if="subCategory.sites && subCategory.sites.length > 0">
+              <div class="sites-grid">
+                <div
+                  v-for="site in subCategory.sites.slice(0, 6)"
+                  :key="site.id"
+                  class="site-preview"
+                >
+                  <img :src="site.icon" :alt="site.name" @error="handleImageError">
+                  <span>{{ site.name }}</span>
+                </div>
+                <div v-if="subCategory.sites.length > 6" class="more-sites">
+                  +{{ subCategory.sites.length - 6 }} 更多
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <!-- 添加二级分类按钮 -->
-        <div class="add-subcategory-button">
-          <button @click="addSubCategory(category.id)" class="add-sub-btn">
-            ➕ 添加二级分类
-          </button>
+          
+          <!-- 添加二级分类按钮 -->
+          <div class="add-subcategory-button">
+            <button @click="addSubCategory(category.id)" class="add-sub-btn">
+              ➕ 添加二级分类
+            </button>
+          </div>
         </div>
       </div>
     </div>
