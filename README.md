@@ -8,10 +8,6 @@
 [![Vite](https://img.shields.io/badge/Vite-5.4.10-646CFF?logo=vite)](https://vitejs.dev/)
 [![Cloudflare](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?logo=cloudflare)](https://pages.cloudflare.com/)
 
-感谢maodeyu180的开源！在此基础上做的二开
-https://github.com/maodeyu180/mao_nav.git
-
-
 ## ✨ 特性
 
 - 🎨 **现代化设计** - 简洁美观的界面，支持响应式布局
