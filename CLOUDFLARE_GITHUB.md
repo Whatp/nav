@@ -123,6 +123,30 @@ console.log('GitHub API 请求详情:', {
 });
 ```
 
+## 网络连接问题排查
+
+如果遇到网络连接问题（如 "Failed to connect to github.com port 443"），请尝试以下解决方案：
+
+### 1. 检查网络连接
+- 确保您的设备可以正常访问互联网
+- 尝试在浏览器中访问 https://github.com 看是否可以正常访问
+
+### 2. 检查Cloudflare环境中的网络问题
+- 查看Cloudflare Pages的构建日志，确认是否有网络连接相关的错误
+- Cloudflare的某些地区可能对GitHub的访问有限制
+
+### 3. 使用测试功能诊断问题
+管理员界面中添加了"测试连接"按钮，可以用来诊断GitHub连接问题：
+1. 登录管理员界面
+2. 点击"测试连接"按钮
+3. 查看测试结果和详细信息
+
+### 4. 替代方案
+如果持续遇到网络连接问题，可以考虑以下替代方案：
+1. 在本地环境中进行修改，然后手动推送到GitHub
+2. 使用GitHub的Web界面直接编辑文件
+3. 使用GitHub Actions来自动更新数据
+
 ## 安全建议
 
 1. **Token 安全**：
@@ -138,4 +162,4 @@ console.log('GitHub API 请求详情:', {
    - 启用 GitHub Token 的使用日志
    - 监控异常的 API 调用
 
-通过以上步骤，您应该能够解决在 Cloudflare 部署环境中遇到的 GitHub 权限问题。
+通过以上步骤，您应该能够解决在 Cloudflare 部署环境中遇到的 GitHub 权限问题和网络连接问题。

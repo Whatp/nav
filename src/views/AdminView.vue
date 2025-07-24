@@ -572,6 +572,22 @@ onMounted(() => {
   z-index: 100;
 }
 
+.test-btn {
+  padding: 8px 16px;
+  background: #9b59b6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  margin-right: 15px;
+}
+
+.test-btn:hover {
+  background: #8e44ad;
+}
+
 .header-content {
   display: flex;
   align-items: center;
