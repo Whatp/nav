@@ -63,6 +63,66 @@
           </div>
         </div>
       </div>
+      
+      <!-- 二级分类列表 -->
+      <div v-if="category.categories && category.categories.length > 0" class="subcategories-list">
+        <div
+          v-for="(subCategory, subIndex) in category.categories"
+          :key="subCategory.id"
+          class="subcategory-item"
+        >
+          <div class="subcategory-header">
+            <div class="subcategory-info">
+              <span class="subcategory-icon" @click="editSubCategory(category.id, subCategory)">
+                {{ subCategory.icon }}
+              </span>
+              <div class="subcategory-details">
+                <h4 @click="editSubCategory(category.id, subCategory)">{{ subCategory.name }}</h4>
+                <p>{{ subCategory.sites?.length || 0 }} 个站点</p>
+              </div>
+            </div>
+            <div class="subcategory-actions">
+              <span class="order-badge">排序: {{ subCategory.order }}</span>
+              <button @click="moveSubCategory(category.id, subIndex, -1)" :disabled="subIndex === 0" class="move-btn">
+                ⬆️
+              </button>
+              <button @click="moveSubCategory(category.id, subIndex, 1)" :disabled="subIndex === category.categories.length - 1" class="move-btn">
+                ⬇️
+              </button>
+              <button @click="editSubCategory(category.id, subCategory)" class="edit-btn">
+                ✏️ 编辑
+              </button>
+              <button @click="deleteSubCategory(category.id, subCategory.id)" class="delete-btn">
+                🗑️ 删除
+              </button>
+            </div>
+          </div>
+
+          <!-- 二级分类站点预览 -->
+          <div class="sites-preview" v-if="subCategory.sites && subCategory.sites.length > 0">
+            <div class="sites-grid">
+              <div
+                v-for="site in subCategory.sites.slice(0, 6)"
+                :key="site.id"
+                class="site-preview"
+              >
+                <img :src="site.icon" :alt="site.name" @error="handleImageError">
+                <span>{{ site.name }}</span>
+              </div>
+              <div v-if="subCategory.sites.length > 6" class="more-sites">
+                +{{ subCategory.sites.length - 6 }} 更多
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 添加二级分类按钮 -->
+        <div class="add-subcategory-button">
+          <button @click="addSubCategory(category.id)" class="add-sub-btn">
+            ➕ 添加二级分类
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- 添加/编辑分类弹窗 -->
@@ -150,6 +210,7 @@ const localCategories = ref([])
 // 弹窗状态
 const showAddModal = ref(false)
 const editingCategory = ref(null)
+const editingParentCategoryId = ref(null) // 用于编辑二级分类时记录父级分类ID
 
 // 表单数据
 const formData = ref({
@@ -212,23 +273,53 @@ const deleteCategory = (categoryId) => {
 
 // 保存分类
 const saveCategory = () => {
-  if (editingCategory.value) {
-    // 更新现有分类
-    const index = localCategories.value.findIndex(cat => cat.id === editingCategory.value.id)
-    if (index !== -1) {
-      localCategories.value[index] = {
-        ...localCategories.value[index],
-        ...formData.value
+  if (editingParentCategoryId.value) {
+    // 处理二级分类
+    const parentCategory = localCategories.value.find(cat => cat.id === editingParentCategoryId.value)
+    if (parentCategory) {
+      if (!parentCategory.categories) {
+        parentCategory.categories = []
+      }
+      
+      if (editingCategory.value) {
+        // 更新现有二级分类
+        const index = parentCategory.categories.findIndex(subCat => subCat.id === editingCategory.value.id)
+        if (index !== -1) {
+          parentCategory.categories[index] = {
+            ...parentCategory.categories[index],
+            ...formData.value
+          }
+        }
+      } else {
+        // 添加新二级分类
+        const newSubCategory = {
+          id: `subcategory-${Date.now()}`,
+          ...formData.value,
+          sites: []
+        }
+        parentCategory.categories.push(newSubCategory)
       }
     }
   } else {
-    // 添加新分类
-    const newCategory = {
-      id: `category-${Date.now()}`,
-      ...formData.value,
-      sites: []
+    // 处理一级分类
+    if (editingCategory.value) {
+      // 更新现有一级分类
+      const index = localCategories.value.findIndex(cat => cat.id === editingCategory.value.id)
+      if (index !== -1) {
+        localCategories.value[index] = {
+          ...localCategories.value[index],
+          ...formData.value
+        }
+      }
+    } else {
+      // 添加新一级分类
+      const newCategory = {
+        id: `category-${Date.now()}`,
+        ...formData.value,
+        sites: []
+      }
+      localCategories.value.push(newCategory)
     }
-    localCategories.value.push(newCategory)
   }
 
   syncToParent()
@@ -239,6 +330,7 @@ const saveCategory = () => {
 const closeModal = () => {
   showAddModal.value = false
   editingCategory.value = null
+  editingParentCategoryId.value = null
   formData.value = {
     icon: '📁',
     name: '',
@@ -249,6 +341,63 @@ const closeModal = () => {
 // 处理图片错误
 const handleImageError = (event) => {
   event.target.style.display = 'none'
+}
+
+// 添加二级分类
+const addSubCategory = (parentCategoryId) => {
+  editingCategory.value = null
+  editingParentCategoryId.value = parentCategoryId
+  formData.value = {
+    icon: '📁',
+    name: '',
+    order: 0
+  }
+  showAddModal.value = true
+}
+
+// 编辑二级分类
+const editSubCategory = (parentCategoryId, subCategory) => {
+  editingCategory.value = subCategory
+  editingParentCategoryId.value = parentCategoryId
+  formData.value = {
+    icon: subCategory.icon,
+    name: subCategory.name,
+    order: subCategory.order
+  }
+  showAddModal.value = true
+}
+
+// 删除二级分类
+const deleteSubCategory = (parentCategoryId, subCategoryId) => {
+  if (confirm('确定要删除这个二级分类吗？这将同时删除分类下的所有站点。')) {
+    const parentCategory = localCategories.value.find(cat => cat.id === parentCategoryId)
+    if (parentCategory && parentCategory.categories) {
+      parentCategory.categories = parentCategory.categories.filter(subCat => subCat.id !== subCategoryId)
+      syncToParent()
+    }
+  }
+}
+
+// 移动二级分类
+const moveSubCategory = (parentCategoryId, subIndex, direction) => {
+  const newIndex = subIndex + direction
+  const parentCategory = localCategories.value.find(cat => cat.id === parentCategoryId)
+  
+  if (!parentCategory || !parentCategory.categories) return
+  
+  if (newIndex < 0 || newIndex >= parentCategory.categories.length) return
+
+  const subCategories = [...parentCategory.categories]
+  const item = subCategories.splice(subIndex, 1)[0]
+  subCategories.splice(newIndex, 0, item)
+
+  // 重新排序
+  subCategories.forEach((subCategory, idx) => {
+    subCategory.order = idx
+  })
+
+  parentCategory.categories = subCategories
+  syncToParent()
 }
 </script>
 
@@ -636,5 +785,94 @@ const handleImageError = (event) => {
   .sites-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
+}
+
+/* 二级分类样式 */
+.subcategories-list {
+  margin-top: 20px;
+  padding-left: 20px;
+  border-left: 2px solid #3498db;
+}
+
+.subcategory-item {
+  background: #e8f4fc;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #d1e7f9;
+  margin-bottom: 15px;
+  transition: box-shadow 0.3s ease;
+}
+
+.subcategory-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subcategory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.subcategory-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.subcategory-icon {
+  font-size: 24px;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.subcategory-icon:hover {
+  background: rgba(52, 152, 219, 0.1);
+}
+
+.subcategory-details h4 {
+  margin: 0 0 3px 0;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  font-size: 16px;
+}
+
+.subcategory-details h4:hover {
+  color: #3498db;
+}
+
+.subcategory-details p {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 12px;
+}
+
+.subcategory-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-subcategory-button {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.add-sub-btn {
+  padding: 8px 16px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.add-sub-btn:hover {
+  background: #2980b9;
 }
 </style>

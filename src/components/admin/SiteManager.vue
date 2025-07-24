@@ -111,9 +111,19 @@
               <label>所属分类 *:</label>
               <select v-model="formData.categoryId" required class="form-input">
                 <option value="">请选择分类</option>
-                <option v-for="category in categories" :key="category.id" :value="category.id">
-                  {{ category.icon }} {{ category.name }}
-                </option>
+                <template v-for="category in categories" :key="category.id">
+                  <option :value="category.id">
+                    {{ category.icon }} {{ category.name }}
+                  </option>
+                  <option
+                    v-for="subCategory in category.categories"
+                    :key="subCategory.id"
+                    :value="subCategory.id"
+                    style="padding-left: 20px;"
+                  >
+                    └─ {{ subCategory.icon }} {{ subCategory.name }}
+                  </option>
+                </template>
               </select>
             </div>
           </div>
@@ -220,12 +230,27 @@ const syncToParent = () => {
 const allSites = computed(() => {
   const sites = []
   localCategories.value.forEach(category => {
+    // 处理一级分类中的站点
     if (category.sites) {
       category.sites.forEach(site => {
         sites.push({
           ...site,
           categoryId: category.id
         })
+      })
+    }
+    
+    // 处理二级分类中的站点
+    if (category.categories && category.categories.length > 0) {
+      category.categories.forEach(subCategory => {
+        if (subCategory.sites) {
+          subCategory.sites.forEach(site => {
+            sites.push({
+              ...site,
+              categoryId: subCategory.id
+            })
+          })
+        }
       })
     }
   })
@@ -251,8 +276,23 @@ const paginatedSites = computed(() => {
 
 // 获取分类名称
 const getCategoryName = (categoryId) => {
-  const category = localCategories.value.find(cat => cat.id === categoryId)
-  return category ? `${category.icon} ${category.name}` : '未分类'
+  // 先在一级分类中查找
+  let category = localCategories.value.find(cat => cat.id === categoryId)
+  if (category) {
+    return `${category.icon} ${category.name}`
+  }
+
+  // 如果没找到，再在二级分类中查找
+  for (const cat of localCategories.value) {
+    if (cat.categories && cat.categories.length > 0) {
+      const subCategory = cat.categories.find(subCat => subCat.id === categoryId)
+      if (subCategory) {
+        return `${cat.icon} ${cat.name} / ${subCategory.icon} ${subCategory.name}`
+      }
+    }
+  }
+
+  return '未分类'
 }
 
 // 编辑站点
@@ -271,10 +311,29 @@ const editSite = (site) => {
 // 删除站点
 const deleteSite = (site) => {
   if (confirm(`确定要删除站点"${site.name}"吗？`)) {
-    const category = localCategories.value.find(cat => cat.id === site.categoryId)
+    // 先在一级分类中查找
+    let category = localCategories.value.find(cat => cat.id === site.categoryId)
     if (category && category.sites) {
       category.sites = category.sites.filter(s => s.id !== site.id)
       syncToParent()
+      return
+    }
+
+    // 如果没找到，再在二级分类中查找
+    for (const cat of localCategories.value) {
+      if (cat.categories && cat.categories.length > 0) {
+        let found = false
+        cat.categories.forEach(subCategory => {
+          if (subCategory.id === site.categoryId && subCategory.sites) {
+            subCategory.sites = subCategory.sites.filter(s => s.id !== site.id)
+            found = true
+          }
+        })
+        if (found) {
+          syncToParent()
+          return
+        }
+      }
     }
   }
 }
@@ -400,12 +459,27 @@ const autoDetectIcon = async () => {
 
 // 保存站点
 const saveSite = () => {
-  const category = localCategories.value.find(cat => cat.id === formData.value.categoryId)
+  // 先在一级分类中查找
+  let category = localCategories.value.find(cat => cat.id === formData.value.categoryId)
+  if (!category) {
+    // 如果没找到，再在二级分类中查找
+    for (const cat of localCategories.value) {
+      if (cat.categories && cat.categories.length > 0) {
+        const subCategory = cat.categories.find(subCat => subCat.id === formData.value.categoryId)
+        if (subCategory) {
+          category = subCategory
+          break
+        }
+      }
+    }
+  }
+
   if (!category) {
     alert('请选择有效的分类')
     return
   }
 
+  // 确保分类有sites数组
   if (!category.sites) {
     category.sites = []
   }
