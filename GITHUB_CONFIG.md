@@ -29,7 +29,7 @@
 VITE_GITHUB_TOKEN=your_github_token_here
 VITE_GITHUB_OWNER=your_github_username
 VITE_GITHUB_REPO=nav
-VITE_GITHUB_BRANCH=master
+VITE_GITHUB_BRANCH=main
 ```
 
 将 `your_github_token_here` 替换为您在第一步中创建的GitHub Personal Access Token。

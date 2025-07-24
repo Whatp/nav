@@ -68,7 +68,7 @@
    VITE_GITHUB_TOKEN = your_github_token
    VITE_GITHUB_OWNER = your_github_username
    VITE_GITHUB_REPO = nav
-   VITE_GITHUB_BRANCH = master
+   VITE_GITHUB_BRANCH = main
    ```
 5. 点击 "Save"
 6. 重新部署项目以使环境变量生效

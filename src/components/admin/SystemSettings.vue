@@ -68,7 +68,7 @@
         <div class="config-item">
           <label>GitHub 分支 (VITE_GITHUB_BRANCH):</label>
           <div class="config-value">
-            <span class="value-display">{{ envConfig.githubBranch || '默认: master' }}</span>
+            <span class="value-display">{{ envConfig.githubBranch || '默认: main' }}</span>
           </div>
         </div>
       </div>
