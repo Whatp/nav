@@ -47,6 +47,12 @@ VITE_GITHUB_BRANCH=master
 2. **Token过期**：检查Token是否已过期，如果过期需要重新生成
 3. **环境变量未生效**：确保在启动开发服务器前配置好环境变量
 4. **仓库名称错误**：确保VITE_GITHUB_REPO配置正确
+5. **"Resource not accessible by personal access token"错误**：
+   - 如果您使用的是Fine-grained tokens而不是Classic tokens，可能需要额外的配置
+   - 确保Token具有对目标仓库的写入权限
+   - 检查Token的Repository permissions设置：
+     - `Contents`: Read and write
+     - `Metadata`: Read-only
 
 ### 5. 更详细的错误信息
 
