@@ -35,6 +35,7 @@
           <div class="header-actions">
             <button @click="emergencyReset" class="emergency-btn" hidden="true">🚨 紧急重置</button>
             <button @click="debugLoadData" class="debug-btn" hidden="true">🔍 调试加载</button>
+            <button @click="testGitHubConnection" class="test-btn">🧪 测试连接</button>
             <span class="user-info">管理员</span>
             <button @click="logout" class="logout-btn">退出</button>
           </div>
@@ -245,6 +246,56 @@ const debugLoadData = async () => {
       [`• 错误信息: ${error.message}`, `• 错误类型: ${error.constructor.name}`]
     )
   }
+  
+  // 测试GitHub连接
+  const testGitHubConnection = async () => {
+    console.log('=== 开始测试GitHub连接 ===')
+    loading.value = true
+  
+    try {
+      console.log('当前环境变量:', {
+        VITE_GITHUB_TOKEN: import.meta.env.VITE_GITHUB_TOKEN ? '已配置' : '未配置',
+        VITE_GITHUB_OWNER: import.meta.env.VITE_GITHUB_OWNER,
+        VITE_GITHUB_REPO: import.meta.env.VITE_GITHUB_REPO,
+        VITE_GITHUB_BRANCH: import.meta.env.VITE_GITHUB_BRANCH
+      })
+  
+      const result = await verifyGitHubConnection()
+      console.log('GitHub连接测试结果:', result)
+  
+      if (result.connected) {
+        showDialog(
+          'success',
+          '🎉 连接成功',
+          '已成功连接到GitHub仓库',
+          [
+            `• 仓库: ${result.repo}`,
+            `• 权限: ${JSON.stringify(result.permissions)}`
+          ]
+        )
+      } else {
+        showDialog(
+          'error',
+          '❌ 连接失败',
+          '无法连接到GitHub仓库',
+          [`• 错误信息: ${result.error}`]
+        )
+      }
+    } catch (error) {
+      console.error('GitHub连接测试失败:', error)
+      showDialog(
+        'error',
+        '❌ 测试失败',
+        '测试过程中发生错误',
+        [
+          `• 错误详情: ${error.message}`,
+          `• 错误类型: ${error.constructor.name}`
+        ]
+      )
+    } finally {
+      loading.value = false
+    }
+  }
 }
 
 // 加载分类数据（简化版本，暂时只加载本地数据）
@@ -347,7 +398,11 @@ const saveToGitHub = async () => {
       'error',
       '❌ 保存失败',
       '保存过程中发生错误，请重试',
-      [`• 错误详情: ${error.message}`]
+      [
+        `• 错误详情: ${error.message}`,
+        `• 错误类型: ${error.constructor.name}`,
+        `• 发生时间: ${new Date().toLocaleString('zh-CN')}`
+      ]
     )
   } finally {
     saving.value = false

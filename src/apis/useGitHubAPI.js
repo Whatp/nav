@@ -83,6 +83,15 @@ export function useGitHubAPI() {
         throw new Error('请求超时，请检查网络连接')
       }
 
+      // 检查是否是网络连接错误
+      if (error.message.includes('Failed to fetch') ||
+          error.message.includes('fetch failed') ||
+          error.message.includes('NetworkError') ||
+          error.message.includes('ECONNREFUSED') ||
+          error.message.includes('ENOTFOUND')) {
+        throw new Error('网络连接失败，请检查您的网络设置或稍后重试')
+      }
+
       // 检查是否是CORS相关错误
       if (error.message.includes('CORS') || error.message.includes('Network')) {
         throw new Error('网络请求失败，可能是CORS问题或网络连接问题')
@@ -145,6 +154,16 @@ export function useGitHubAPI() {
       if (error.name === 'AbortError') {
         throw new Error('保存超时，请检查网络连接')
       }
+
+      // 检查是否是网络连接错误
+      if (error.message.includes('Failed to fetch') ||
+          error.message.includes('fetch failed') ||
+          error.message.includes('NetworkError') ||
+          error.message.includes('ECONNREFUSED') ||
+          error.message.includes('ENOTFOUND')) {
+        throw new Error('网络连接失败，请检查您的网络设置或稍后重试')
+      }
+
       throw error
     }
   }
