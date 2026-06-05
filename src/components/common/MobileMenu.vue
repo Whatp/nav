@@ -1,29 +1,43 @@
 <template>
-  <!-- 移动端分类菜单 -->
-  <div class="mobile-menu" :class="{ active: show }">
+  <div class="mobile-menu" :class="{ active: show }" role="dialog" aria-label="分类导航">
     <div class="mobile-menu-header">
-      <h3>分类导航</h3>
-      <button class="close-btn" @click="$emit('close')">×</button>
+      <div>
+        <p>Menu</p>
+        <h3>分类导航</h3>
+      </div>
+      <button class="close-btn" @click="$emit('close')" aria-label="关闭菜单">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
     </div>
+
     <ul class="mobile-category-list">
-      <li
-        v-for="category in categories"
-        :key="category.id"
-        class="mobile-category-item"
-        @click="$emit('scroll-to-category', category.id)"
-      >
-        <span class="category-icon">{{ category.icon }}</span>
-        <span class="category-name">{{ category.name }}</span>
-      </li>
+      <template v-for="category in categories" :key="category.id">
+        <li
+          class="mobile-category-item"
+          @click="$emit('scroll-to-category', category.id)"
+        >
+          <span class="category-icon">{{ category.icon }}</span>
+          <span class="category-name">{{ category.name }}</span>
+        </li>
+        <li
+          v-for="subCategory in category.categories || []"
+          :key="subCategory.id"
+          class="mobile-category-item subcategory"
+          @click="$emit('scroll-to-category', subCategory.id)"
+        >
+          <span class="category-icon">{{ subCategory.icon }}</span>
+          <span class="category-name">{{ subCategory.name }}</span>
+        </li>
+      </template>
     </ul>
   </div>
 
-  <!-- 移动端菜单遮罩 -->
   <div class="mobile-menu-overlay" :class="{ active: show }" @click="$emit('close')"></div>
 </template>
 
 <script setup>
-// Props
 defineProps({
   show: {
     type: Boolean,
@@ -35,146 +49,168 @@ defineProps({
   }
 })
 
-// Emits
 defineEmits(['close', 'scroll-to-category'])
 </script>
 
 <style scoped>
-/* 移动端菜单 */
 .mobile-menu {
   position: fixed;
   top: 0;
-  right: -100%;
-  width: 280px;
-  height: 100vh;
-  background: white;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  right: 0;
   z-index: 1001;
-  transition: right 0.3s ease;
-  overflow-y: auto;
   display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-menu {
-    display: block;
-  }
+  width: min(86vw, 340px);
+  height: 100vh;
+  overflow-y: auto;
+  color: var(--color-heading);
+  background:
+    linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent 26%),
+    rgba(255, 255, 255, 0.94);
+  border-left: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: -24px 0 60px rgba(15, 23, 42, 0.18);
+  transform: translateX(102%);
+  transition: transform var(--transition-normal) var(--ease-spring);
+  backdrop-filter: blur(22px);
 }
 
 .mobile-menu.active {
-  right: 0;
+  transform: translateX(0);
 }
 
 .mobile-menu-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #e9ecef;
-  background: #2c3e50;
-  color: white;
+  justify-content: space-between;
+  padding: 22px 20px;
+  background: rgba(255, 255, 255, 0.82);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  backdrop-filter: blur(16px);
+}
+
+.mobile-menu-header p {
+  margin: 0 0 4px;
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .mobile-menu-header h3 {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  color: var(--color-heading);
+  font-size: 22px;
+  font-weight: 900;
 }
 
 .close-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--color-heading);
+  background: rgba(241, 245, 249, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  transition: color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-primary);
+  transform: rotate(6deg);
+  box-shadow: var(--shadow-md);
 }
 
 .mobile-category-list {
-  list-style: none;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin: 0;
+  padding: 16px 14px 32px;
 }
 
 .mobile-category-item {
   display: flex;
   align-items: center;
-  padding: 16px 20px;
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  border-bottom: 1px solid #f8f9fa;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .mobile-category-item:hover {
-  background: #f8f9fa;
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.12);
+  transform: translateX(2px);
+}
+
+.mobile-category-item.subcategory {
+  min-height: 42px;
+  margin-left: 24px;
+  color: var(--color-text-muted);
+  background: rgba(241, 245, 249, 0.55);
 }
 
 .mobile-category-item .category-icon {
-  font-size: 20px;
-  margin-right: 12px;
-  width: 24px;
-  text-align: center;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
 }
 
 .mobile-category-item .category-name {
-  font-size: 16px;
-  font-weight: 500;
-  color: #2c3e50;
+  min-width: 0;
+  overflow: hidden;
+  color: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* 移动端菜单遮罩 */
 .mobile-menu-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
   z-index: 999;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
   display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-menu-overlay {
-    display: block;
-  }
+  visibility: hidden;
+  background: rgba(15, 23, 42, 0.42);
+  opacity: 0;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+  backdrop-filter: blur(2px);
 }
 
 .mobile-menu-overlay.active {
-  opacity: 1;
   visibility: visible;
+  opacity: 1;
 }
 
-/* 暗色主题 */
 :global(.dark) .mobile-menu {
-  background: #1a1a1a;
-  color: #ffffff;
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.94);
+  border-color: rgba(148, 163, 184, 0.18);
 }
 
-:global(.dark) .mobile-category-item {
-  border-bottom: 1px solid #333333;
-  color: #ffffff;
+:global(.dark) .mobile-menu-header {
+  background: rgba(15, 23, 42, 0.82);
 }
 
-:global(.dark) .mobile-category-item:hover {
-  background: #404040;
+:global(.dark) .mobile-menu-header h3 {
+  color: #f8fafc;
 }
 
-:global(.dark) .mobile-category-item .category-name {
-  color: #ffffff;
+@media (max-width: 768px) {
+  .mobile-menu,
+  .mobile-menu-overlay {
+    display: block;
+  }
 }
 </style>

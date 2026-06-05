@@ -61,11 +61,16 @@ const { scrollToCategory } = useScroll()
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
-  background-color: #f5f7fa;
-  transition: background-color 0.3s ease;
+  background:
+    linear-gradient(120deg, rgba(37, 99, 235, 0.08), transparent 28%),
+    linear-gradient(300deg, rgba(15, 118, 110, 0.08), transparent 34%),
+    repeating-linear-gradient(90deg, rgba(15, 23, 42, 0.028) 0 1px, transparent 1px 80px),
+    repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.024) 0 1px, transparent 1px 80px),
+    var(--color-background);
+  color: var(--color-text);
+  position: relative;
+  transition: background-color var(--transition-normal);
 }
-
-
 
 .main-content {
   flex: 1;
@@ -74,9 +79,10 @@ const { scrollToCategory } = useScroll()
   height: 100vh;
   overflow: hidden;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
-/* 响应式设计 */
 @media (max-width: 768px) {
   .app-layout {
     flex-direction: column;

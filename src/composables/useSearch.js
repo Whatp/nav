@@ -1,18 +1,13 @@
 import { ref } from 'vue'
-// 导入搜索引擎logo图片
 import googleLogo from '@/assets/goolge.png'
 import baiduLogo from '@/assets/baidu.png'
 import bingLogo from '@/assets/bing.png'
 import duckLogo from '@/assets/duck.png'
 
-/**
- * 搜索功能 composable
- */
 export function useSearch() {
   const searchQuery = ref('')
   const selectedEngine = ref('google')
 
-  // 搜索引擎配置
   const searchEngines = {
     google: {
       url: 'https://www.google.com/search?q=',
@@ -36,13 +31,12 @@ export function useSearch() {
     }
   }
 
-  // 处理搜索
   const handleSearch = () => {
-    if (!searchQuery.value.trim()) return
+    const query = searchQuery.value.trim()
+    if (!query) return
 
     const engine = searchEngines[selectedEngine.value]
-    const url = engine.url + encodeURIComponent(searchQuery.value)
-    window.open(url, '_blank')
+    window.open(engine.url + encodeURIComponent(query), '_blank', 'noopener,noreferrer')
   }
 
   return {

@@ -5,9 +5,10 @@
       @click="scrollToTop"
       class="back-to-top"
       title="返回顶部"
+      aria-label="返回顶部"
     >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="m18 15-6-6-6 6"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </button>
   </Transition>
@@ -18,16 +19,13 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 const isVisible = ref(false)
 
-// 监听滚动事件
 const handleScroll = () => {
   const contentArea = document.querySelector('.content-area')
   if (contentArea) {
-    const scrollTop = contentArea.scrollTop
-    isVisible.value = scrollTop > 300
+    isVisible.value = contentArea.scrollTop > 300
   }
 }
 
-// 返回顶部
 const scrollToTop = () => {
   const contentArea = document.querySelector('.content-area')
   if (contentArea) {
@@ -41,7 +39,7 @@ const scrollToTop = () => {
 onMounted(() => {
   const contentArea = document.querySelector('.content-area')
   if (contentArea) {
-    contentArea.addEventListener('scroll', handleScroll)
+    contentArea.addEventListener('scroll', handleScroll, { passive: true })
   }
 })
 
@@ -58,50 +56,50 @@ onUnmounted(() => {
   position: fixed;
   right: 30px;
   bottom: 30px;
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
+  width: 50px;
+  height: 50px;
+  color: var(--color-primary);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(18px);
+  transition: transform var(--transition-normal) var(--ease-spring), box-shadow var(--transition-normal), color var(--transition-fast);
 }
 
 .back-to-top:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
-  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+  color: var(--color-accent);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 .back-to-top:active {
-  transform: translateY(-1px) scale(1.02);
+  transform: translateY(-1px);
 }
 
-/* 过渡动画 */
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.3s ease;
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(20px) scale(0.8);
+  transform: translateY(14px) scale(0.92);
 }
 
-/* 响应式设计 */
 @media (max-width: 768px) {
   .back-to-top {
-    right: 20px;
-    bottom: 20px;
-    width: 45px;
-    height: 45px;
+    right: 18px;
+    bottom: 18px;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
   }
 }
 </style>

@@ -4,168 +4,245 @@
     target="_blank"
     rel="noopener noreferrer"
     class="site-card"
+    :aria-label="`打开 ${site.name}`"
   >
     <div class="site-icon">
-      <img :src="site.icon" :alt="site.name" @error="handleImageError" />
+      <img v-if="!iconFailed" :src="site.icon" :alt="site.name" @error="handleImageError" />
+      <span v-else>{{ fallbackInitial }}</span>
     </div>
     <div class="site-info">
-      <h3 class="site-name">{{ site.name }}</h3>
+      <div class="site-heading">
+        <h3 class="site-name">{{ site.name }}</h3>
+        <svg class="site-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
       <p class="site-description">{{ site.description }}</p>
+      <span class="site-host">{{ host }}</span>
     </div>
   </a>
 </template>
 
 <script setup>
-// Props
-defineProps({
+import { computed, ref } from 'vue'
+
+const props = defineProps({
   site: {
     type: Object,
     required: true
   }
 })
 
-// 处理图片加载错误
-const handleImageError = (event) => {
-  event.target.style.display = 'none'
+const iconFailed = ref(false)
+
+const fallbackInitial = computed(() => props.site.name?.trim().slice(0, 1).toUpperCase() || '?')
+
+const host = computed(() => {
+  try {
+    return new URL(props.site.url).hostname.replace(/^www\./, '')
+  } catch {
+    return props.site.url
+  }
+})
+
+const handleImageError = () => {
+  iconFailed.value = true
 }
 </script>
 
 <style scoped>
 .site-card {
-  display: flex;
-  align-items: center;
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.08), rgba(155, 89, 182, 0.08));
-  border-radius: 16px;
-  padding: 20px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 2px solid rgba(52, 152, 219, 0.2);
   position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 128px;
+  padding: 18px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
+  color: inherit;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+  backdrop-filter: blur(16px);
+  transition: transform var(--transition-normal) var(--ease-spring), box-shadow var(--transition-normal), border-color var(--transition-normal), background-color var(--transition-normal);
 }
 
 .site-card::before {
-  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(155, 89, 182, 0.15));
-  opacity: 0;
-  transition: all 0.4s ease;
-  transform: scale(0.8);
+  inset: 0 auto 0 0;
+  width: 4px;
+  content: '';
+  background: linear-gradient(180deg, var(--color-primary), var(--color-accent), var(--color-warm));
+  opacity: 0.82;
 }
 
 .site-card::after {
-  content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transform: rotate(45deg) translateX(-100%);
-  transition: transform 0.6s ease;
+  top: 0;
+  left: -70%;
+  width: 42%;
+  height: 100%;
+  content: '';
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.72), transparent);
+  opacity: 0;
+  transform: skewX(-18deg);
+  transition: left 0.65s ease, opacity 0.3s ease;
 }
 
 .site-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 
-    0 20px 40px rgba(52, 152, 219, 0.2),
-    0 10px 20px rgba(155, 89, 182, 0.15),
-    0 0 0 1px rgba(52, 152, 219, 0.3);
-  border-color: rgba(52, 152, 219, 0.4);
-}
-
-.site-card:hover::before {
-  opacity: 1;
-  transform: scale(1);
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.12), 0 14px 28px rgba(37, 99, 235, 0.1);
+  transform: translateY(-5px);
 }
 
 .site-card:hover::after {
-  transform: rotate(45deg) translateX(100%);
+  left: 120%;
+  opacity: 1;
+}
+
+.site-card:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.28);
+  outline-offset: 3px;
 }
 
 .site-icon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
   width: 52px;
   height: 52px;
-  margin-right: 18px;
-  border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s ease;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--color-primary);
+  font-size: 22px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ffffff, #eef6ff);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 10px 24px rgba(15, 23, 42, 0.08);
+  transition: transform var(--transition-normal) var(--ease-spring);
 }
 
 .site-card:hover .site-icon {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9));
+  transform: translateY(-2px) rotate(2deg);
 }
 
 .site-icon img {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
-  transition: all 0.4s ease;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
-
-.site-card:hover .site-icon img {
-  transform: scale(1.05);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
 .site-info {
-  flex: 1;
   position: relative;
-  z-index: 2;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.site-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .site-name {
-  font-size: 19px;
-  font-weight: 800;
-  margin: 0 0 6px 0;
-  color: #1a202c;
-  transition: all 0.3s ease;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--color-heading);
+  font-size: 18px;
+  font-weight: 850;
+  line-height: 1.25;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-.site-card:hover .site-name {
-  color: #2d3748;
-  transform: translateX(2px);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.site-arrow {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #94a3b8;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.site-card:hover .site-arrow {
+  color: var(--color-primary);
+  transform: translate(2px, -2px);
 }
 
 .site-description {
-  font-size: 15px;
-  color: #4a5568;
-  margin: 0;
-  line-height: 1.5;
-  transition: all 0.3s ease;
+  display: -webkit-box;
+  min-height: 42px;
+  margin: 8px 0 13px;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 14px;
   font-weight: 500;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-.site-card:hover .site-description {
-  color: #2d3748;
-  transform: translateX(2px);
+.site-host {
+  display: inline-flex;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 5px 9px;
+  overflow: hidden;
+  color: var(--color-accent);
+  font-size: 12px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--color-accent-soft);
+  border-radius: 999px;
 }
 
+:global(.dark) .site-card {
+  background: rgba(15, 23, 42, 0.82);
+  border-color: rgba(148, 163, 184, 0.18);
+}
 
+:global(.dark) .site-name {
+  color: #f8fafc;
+}
 
-/* 响应式设计 */
+:global(.dark) .site-description {
+  color: #cbd5e1;
+}
+
 @media (max-width: 768px) {
   .site-card {
+    gap: 13px;
+    min-height: 118px;
     padding: 15px;
+  }
+
+  .site-icon {
+    width: 46px;
+    height: 46px;
+  }
+
+  .site-icon img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .site-name {
+    font-size: 16px;
+  }
+
+  .site-description {
+    min-height: auto;
+    margin-bottom: 10px;
   }
 }
 </style>

@@ -1,14 +1,13 @@
 <template>
-  <section
-    class="category-section"
-    :id="`category-${category.id}`"
-  >
-    <h2 class="category-title">
-      <span class="category-icon">{{ category.icon }}</span>
-      <span class="category-name">{{ category.name }}</span>
-    </h2>
-    
-    <!-- 如果有子分类，显示子分类 -->
+  <section class="category-section" :id="`category-${category.id}`">
+    <div class="category-heading">
+      <h2 class="category-title">
+        <span class="category-icon">{{ category.icon }}</span>
+        <span class="category-name">{{ category.name }}</span>
+      </h2>
+      <span v-if="siteCount" class="category-count">{{ siteCount }} 个入口</span>
+    </div>
+
     <div v-if="hasSubCategories" class="subcategories-container">
       <SubCategorySection
         v-for="subCategory in category.categories"
@@ -16,8 +15,7 @@
         :category="subCategory"
       />
     </div>
-    
-    <!-- 如果有网站，显示网站 -->
+
     <div v-else-if="hasSites" class="sites-grid">
       <SiteCard
         v-for="site in category.sites"
@@ -25,8 +23,7 @@
         :site="site"
       />
     </div>
-    
-    <!-- 如果既没有子分类也没有网站，显示空状态 -->
+
     <div v-else class="empty-category">
       <p>暂无内容</p>
     </div>
@@ -38,7 +35,6 @@ import { computed } from 'vue'
 import SiteCard from './SiteCard.vue'
 import SubCategorySection from './SubCategorySection.vue'
 
-// Props
 const props = defineProps({
   category: {
     type: Object,
@@ -46,133 +42,143 @@ const props = defineProps({
   }
 })
 
-// 计算属性：是否有子分类
-const hasSubCategories = computed(() => {
-  return props.category.categories && props.category.categories.length > 0
-})
+const hasSubCategories = computed(() => props.category.categories?.length > 0)
+const hasSites = computed(() => props.category.sites?.length > 0)
 
-// 计算属性：是否有网站
-const hasSites = computed(() => {
-  return props.category.sites && props.category.sites.length > 0
-})
+const countSites = (category) => {
+  const ownSites = category.sites?.length || 0
+  const nestedSites = category.categories?.reduce((total, item) => total + countSites(item), 0) || 0
+  return ownSites + nestedSites
+}
+
+const siteCount = computed(() => countSites(props.category))
 </script>
 
 <style scoped>
 .category-section {
-  margin-bottom: 50px;
+  scroll-margin-top: 106px;
+  margin-bottom: clamp(44px, 6vw, 74px);
+  animation: fadeInUp 0.55s var(--ease-spring);
+}
+
+.category-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .category-title {
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 25px;
-  color: #2c3e50;
   display: flex;
   align-items: center;
+  gap: 13px;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-heading);
   cursor: default;
 }
 
 .category-title .category-icon {
-  font-size: 32px;
-  margin-right: 16px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  font-size: 24px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 118, 110, 0.12));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 .category-title .category-name {
-  margin-left: 10px;
-  font-size: 26px;
+  overflow: hidden;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 900;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-count {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 32px;
+  padding: 6px 12px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 800;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.66);
 }
 
 .sites-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 18px;
 }
 
 .subcategories-container {
   display: flex;
   flex-direction: column;
-  gap: 30px;
-}
-
-.subcategory-item {
-  margin-bottom: 30px;
-}
-
-.subcategory-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #2c3e50;
-  display: flex;
-  align-items: center;
-  cursor: default;
-}
-
-.subcategory-title:hover {
-  cursor: default;
-}
-
-.subcategory-title .subcategory-icon {
-  font-size: 24px;
-  margin-right: 12px;
-}
-
-.subcategory-title .subcategory-name {
-  margin-left: 8px;
-  font-size: 20px;
+  gap: 28px;
 }
 
 .empty-category {
-  padding: 20px;
+  padding: 22px;
   text-align: center;
-  color: #95a5a6;
-  background: #f8f9fa;
-  border-radius: 12px;
-  border: 1px dashed #e9ecef;
+  color: var(--color-text-muted);
+  border: 1px dashed rgba(148, 163, 184, 0.38);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.46);
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .sites-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .category-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-
-  .category-title .category-icon {
-    font-size: 28px;
-    margin-right: 12px;
-  }
-
-  .category-title .category-name {
-    font-size: 22px;
-  }
+.empty-category p {
+  margin: 0;
 }
 
-/* 暗色主题 */
-:global(.dark) .category-title {
-  color: #ffffff;
-}
-
-:global(.dark) .category-title .category-icon {
-  filter: brightness(1.2);
-}
-
-:global(.dark) .empty-category {
-  background: #1e1f2a;
-  color: #95a5a6;
-  border-color: #333333;
-}
-
+:global(.dark) .category-title,
 :global(.dark) .subcategory-title {
   color: #ffffff;
 }
 
-:global(.dark) .subcategory-title .subcategory-icon {
-  filter: brightness(1.2);
+:global(.dark) .empty-category {
+  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+@media (max-width: 768px) {
+  .category-section {
+    scroll-margin-top: 98px;
+    margin-bottom: 42px;
+  }
+
+  .category-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .category-title .category-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    border-radius: 14px;
+  }
+
+  .category-title .category-name {
+    white-space: normal;
+  }
+
+  .sites-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 }
 </style>

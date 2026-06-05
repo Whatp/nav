@@ -5,6 +5,7 @@
   >
     <MainContent
       :categories="categories"
+      :title="title"
       :loading="loading"
       :error="error"
       @retry="fetchCategories"
@@ -26,6 +27,5 @@ onMounted(() => {
   fetchCategories()
 })
 </script>
-
 
 

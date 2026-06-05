@@ -1,92 +1,111 @@
 <template>
-    <div class="subcategory-section" :id="`category-${category.id}`">
-        <h3 class="subcategory-title">
-            <span class="subcategory-icon">{{ category.icon }}</span>
-            <span class="subcategory-name">{{ category.name }}</span>
-        </h3>
-        <div class="sites-grid">
-            <SiteCard v-for="site in category.sites" :key="site.id" :site="site" />
-        </div>
+  <div class="subcategory-section" :id="`category-${category.id}`">
+    <div class="subcategory-heading">
+      <h3 class="subcategory-title">
+        <span class="subcategory-icon">{{ category.icon }}</span>
+        <span class="subcategory-name">{{ category.name }}</span>
+      </h3>
+      <span v-if="category.sites?.length" class="subcategory-count">{{ category.sites.length }}</span>
     </div>
+    <div class="sites-grid">
+      <SiteCard v-for="site in category.sites" :key="site.id" :site="site" />
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import SiteCard from './SiteCard.vue'
 
-// Props
-const props = defineProps({
-    category: {
-        type: Object,
-        required: true
-    }
+defineProps({
+  category: {
+    type: Object,
+    required: true
+  }
 })
-
 </script>
 
 <style scoped>
 .subcategory-section {
-    margin-bottom: 30px;
+  scroll-margin-top: 106px;
+}
+
+.subcategory-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .subcategory-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #2c3e50;
   display: flex;
   align-items: center;
-  cursor: default;
-}
-
-.subcategory-title:hover {
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-heading);
   cursor: default;
 }
 
 .subcategory-title .subcategory-icon {
-    font-size: 24px;
-    margin-right: 12px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.2);
 }
 
 .subcategory-title .subcategory-name {
-    margin-left: 8px;
-    font-size: 20px;
+  overflow: hidden;
+  color: var(--color-heading);
+  font-size: 20px;
+  font-weight: 850;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subcategory-count {
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .sites-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
 }
 
-/* 响应式设计 */
+:global(.dark) .subcategory-title,
+:global(.dark) .subcategory-title .subcategory-name {
+  color: #ffffff;
+}
+
 @media (max-width: 768px) {
-    .sites-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
+  .subcategory-section {
+    scroll-margin-top: 98px;
+  }
 
-    .subcategory-title {
-        font-size: 20px;
-        margin-bottom: 16px;
-    }
+  .subcategory-title .subcategory-name {
+    font-size: 18px;
+    white-space: normal;
+  }
 
-    .subcategory-title .subcategory-icon {
-        font-size: 20px;
-        margin-right: 10px;
-    }
-
-    .subcategory-title .subcategory-name {
-        font-size: 18px;
-    }
-}
-
-/* 暗色主题 */
-:global(.dark) .subcategory-title {
-    color: #ffffff;
-}
-
-:global(.dark) .subcategory-title .subcategory-icon {
-    filter: brightness(1.2);
+  .sites-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 }
 </style>

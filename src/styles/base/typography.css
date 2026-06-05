@@ -50,7 +50,7 @@ a {
 }
 
 a:hover {
-  color: var(--color-heading);
+  color: var(--color-primary);
 }
 
 /* 代码样式 */
